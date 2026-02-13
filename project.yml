@@ -1,0 +1,33 @@
+name: VIR
+options:
+  bundleIdPrefix: com.personal.vir
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "26.0"
+  createIntermediateGroups: true
+  defaultConfig: Release
+
+settings:
+  base:
+    SWIFT_VERSION: "6.2"
+    TARGETED_DEVICE_FAMILY: "1,2"  # iPhone + iPad
+    GENERATE_INFOPLIST_FILE: true
+    INFOPLIST_KEY_NSCameraUsageDescription: "VIR needs camera access to provide delayed video playback for training analysis."
+    INFOPLIST_KEY_UILaunchScreen_Generation: true
+    INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+    INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+
+targets:
+  VIR:
+    type: application
+    platform: iOS
+    sources:
+      - VIR
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.personal.vir
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: true
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""

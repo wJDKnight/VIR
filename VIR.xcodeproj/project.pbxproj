@@ -1,0 +1,482 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0035D1AB3080638DEFDB11DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C489EB2C44A54C6291F43 /* Constants.swift */; };
+		07B57015C06B992800F24DEA /* Clip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2E41DE436DDAA2785E3B4 /* Clip.swift */; };
+		0B3CE81D75349B6F5BEED1CD /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8133725DC207E77DC15A765F /* CameraSettingsView.swift */; };
+		D1E2F3A4B5C6D7E8F9A0B1C2 /* DebugOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* DebugOverlay.swift */; };
+		12384D477F18A1C39DDE5BB1 /* MainCameraScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1935A904F2B7416EF1EE5E89 /* MainCameraScreen.swift */; };
+		12C14C21370649C947787FA8 /* VideoEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B1BA84D01AC5F09080CF6 /* VideoEnums.swift */; };
+		16E521C132A1689A22485E34 /* CircularFrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F813A2046CCB9C2BAFE2339 /* CircularFrameBuffer.swift */; };
+		1A2B3C4D5E6F7A8B9C0D1E2F /* CompressedFrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F67890A1B2C3D4 /* CompressedFrameBuffer.swift */; };
+		2B3C4D5E6F7A8B9C0D1E2F3A /* DiskRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6789012B2C3D4E5 /* DiskRecorder.swift */; };
+		36741B894CAAE7A3A6AA50EE /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2357A0B382641CF59B8ABB /* CameraManager.swift */; };
+		422FE72C9F00808FAC710732 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84871FBBD046433F2D2DA3F /* AppSettings.swift */; };
+		44A5A23DFCD83BE32B1EC131 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4404A779D60404829A886C /* Extensions.swift */; };
+		4DEB42C25E0ACF57EECD9527 /* ArrowHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638AEF29B5398C45461BF9EB /* ArrowHit.swift */; };
+		5D7869765B22718704AA0852 /* AutoClipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCEF2E687D99C9FF8BF3CF9 /* AutoClipper.swift */; };
+		638B7C87CD6216EB1E19C741 /* VolumeButtonHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9062BA2BA89268EEC9F35A0A /* VolumeButtonHandler.swift */; };
+		6FF0FD5D34012212C151F931 /* ReplayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D23074FD65E1DCCDE7A648 /* ReplayViewModel.swift */; };
+		8C81F3749AE027ED9876656E /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DB9F1208F661FDAAB9DC76 /* CameraPreviewView.swift */; };
+		953411B999885078B09B4DB4 /* ReplayPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845E7F173087F6A5C4FCD2C /* ReplayPlayerView.swift */; };
+		A2314534136B23DDF114C083 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */; };
+		A2839BDDAD612216CACDC390 /* MarkingFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDD1490EDF13C4641EDD91 /* MarkingFeedbackView.swift */; };
+		B4B330632560BF159BB2E874 /* DelayedPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89178A67EEE98CEF76333EFA /* DelayedPlaybackView.swift */; };
+		C39B12A8CEDCA203298234A8 /* ClipListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54977E00F0353ADACF36721 /* ClipListView.swift */; };
+		CC4C815317FD2EF4FD8F53F8 /* KeyPointMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC19B255C7C938BA1FFF67A2 /* KeyPointMarker.swift */; };
+		D80CCE397243900C1F84EF1A /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E68443A46DDAADB46CDE2 /* Session.swift */; };
+		EE1C5C795EDCAAF779EC252B /* VIRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DC6F8CA871D9D11A5036BE /* VIRApp.swift */; };
+		EEB8BB0F6B5BE82E1BF14372 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06111BA45F98FD83038088A /* AppState.swift */; };
+		F369F3F61754D6F5E6E79A0F /* KeyPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3920C22EA7DEE8A22B0FFDF1 /* KeyPoint.swift */; };
+		F779CC08456FF5BBD33029DA /* PostSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AC5812CEF7F95F5F1BDF17 /* PostSessionView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1935A904F2B7416EF1EE5E89 /* MainCameraScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCameraScreen.swift; sourceTree = "<group>"; };
+		2FB2E41DE436DDAA2785E3B4 /* Clip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clip.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F67890A1B2C3D4 /* CompressedFrameBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressedFrameBuffer.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6789012B2C3D4E5 /* DiskRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskRecorder.swift; sourceTree = "<group>"; };
+		3920C22EA7DEE8A22B0FFDF1 /* KeyPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPoint.swift; sourceTree = "<group>"; };
+		3CDDD1490EDF13C4641EDD91 /* MarkingFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkingFeedbackView.swift; sourceTree = "<group>"; };
+		55DC6F8CA871D9D11A5036BE /* VIRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIRApp.swift; sourceTree = "<group>"; };
+		638AEF29B5398C45461BF9EB /* ArrowHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowHit.swift; sourceTree = "<group>"; };
+		69AC5812CEF7F95F5F1BDF17 /* PostSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSessionView.swift; sourceTree = "<group>"; };
+		7F813A2046CCB9C2BAFE2339 /* CircularFrameBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularFrameBuffer.swift; sourceTree = "<group>"; };
+		8133725DC207E77DC15A765F /* CameraSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* DebugOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverlay.swift; sourceTree = "<group>"; };
+		89178A67EEE98CEF76333EFA /* DelayedPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedPlaybackView.swift; sourceTree = "<group>"; };
+		9062BA2BA89268EEC9F35A0A /* VolumeButtonHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeButtonHandler.swift; sourceTree = "<group>"; };
+		9F4404A779D60404829A886C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A00B1BA84D01AC5F09080CF6 /* VideoEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEnums.swift; sourceTree = "<group>"; };
+		A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		A54977E00F0353ADACF36721 /* ClipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipListView.swift; sourceTree = "<group>"; };
+		B29E68443A46DDAADB46CDE2 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		BB2357A0B382641CF59B8ABB /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		BC19B255C7C938BA1FFF67A2 /* KeyPointMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPointMarker.swift; sourceTree = "<group>"; };
+		C06111BA45F98FD83038088A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D11A1A50D8CEE48E5D9E2E8F /* VIR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VIR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0D23074FD65E1DCCDE7A648 /* ReplayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayViewModel.swift; sourceTree = "<group>"; };
+		E84871FBBD046433F2D2DA3F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		EFCEF2E687D99C9FF8BF3CF9 /* AutoClipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoClipper.swift; sourceTree = "<group>"; };
+		F0DB9F1208F661FDAAB9DC76 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		F845E7F173087F6A5C4FCD2C /* ReplayPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayPlayerView.swift; sourceTree = "<group>"; };
+		FA3C489EB2C44A54C6291F43 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		144CFBC48AA4D8C21446206C /* Replay */ = {
+			isa = PBXGroup;
+			children = (
+				F845E7F173087F6A5C4FCD2C /* ReplayPlayerView.swift */,
+				E0D23074FD65E1DCCDE7A648 /* ReplayViewModel.swift */,
+			);
+			path = Replay;
+			sourceTree = "<group>";
+		};
+		1CF11D027C10DE69EA77F74A = {
+			isa = PBXGroup;
+			children = (
+				F9915A62BB58611406CC682A /* VIR */,
+				209016EEFA9C5B0D7B55F632 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		209016EEFA9C5B0D7B55F632 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D11A1A50D8CEE48E5D9E2E8F /* VIR.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2984FA2FDDA1B0B756976682 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				63BD93ACAA0DB6F2689B4150 /* Camera */,
+				9676E64C79FC0BFDDC24C6C3 /* ClipManagement */,
+				AE25E6A48C7BDD78FCB4A46B /* Marking */,
+				144CFBC48AA4D8C21446206C /* Replay */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		63BD93ACAA0DB6F2689B4150 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				BB2357A0B382641CF59B8ABB /* CameraManager.swift */,
+				F0DB9F1208F661FDAAB9DC76 /* CameraPreviewView.swift */,
+				8133725DC207E77DC15A765F /* CameraSettingsView.swift */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* DebugOverlay.swift */,
+				A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */,
+				7F813A2046CCB9C2BAFE2339 /* CircularFrameBuffer.swift */,
+				A1B2C3D4E5F67890A1B2C3D4 /* CompressedFrameBuffer.swift */,
+				89178A67EEE98CEF76333EFA /* DelayedPlaybackView.swift */,
+				B2C3D4E5F6789012B2C3D4E5 /* DiskRecorder.swift */,
+				1935A904F2B7416EF1EE5E89 /* MainCameraScreen.swift */,
+				69AC5812CEF7F95F5F1BDF17 /* PostSessionView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		6F12D9199BC40A6009C4CF6C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				C06111BA45F98FD83038088A /* AppState.swift */,
+				55DC6F8CA871D9D11A5036BE /* VIRApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7604DA0FDE36CA32D578A368 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FA3C489EB2C44A54C6291F43 /* Constants.swift */,
+				79E9BD53EF9D77E358C1A057 /* Extensions */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		79E9BD53EF9D77E358C1A057 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9F4404A779D60404829A886C /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9676E64C79FC0BFDDC24C6C3 /* ClipManagement */ = {
+			isa = PBXGroup;
+			children = (
+				EFCEF2E687D99C9FF8BF3CF9 /* AutoClipper.swift */,
+				A54977E00F0353ADACF36721 /* ClipListView.swift */,
+			);
+			path = ClipManagement;
+			sourceTree = "<group>";
+		};
+		AE25E6A48C7BDD78FCB4A46B /* Marking */ = {
+			isa = PBXGroup;
+			children = (
+				BC19B255C7C938BA1FFF67A2 /* KeyPointMarker.swift */,
+				3CDDD1490EDF13C4641EDD91 /* MarkingFeedbackView.swift */,
+				9062BA2BA89268EEC9F35A0A /* VolumeButtonHandler.swift */,
+			);
+			path = Marking;
+			sourceTree = "<group>";
+		};
+		F9915A62BB58611406CC682A /* VIR */ = {
+			isa = PBXGroup;
+			children = (
+				6F12D9199BC40A6009C4CF6C /* App */,
+				2984FA2FDDA1B0B756976682 /* Features */,
+				FBAC245E24493F93740DD360 /* Models */,
+				7604DA0FDE36CA32D578A368 /* Shared */,
+			);
+			path = VIR;
+			sourceTree = "<group>";
+		};
+		FBAC245E24493F93740DD360 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E84871FBBD046433F2D2DA3F /* AppSettings.swift */,
+				638AEF29B5398C45461BF9EB /* ArrowHit.swift */,
+				2FB2E41DE436DDAA2785E3B4 /* Clip.swift */,
+				3920C22EA7DEE8A22B0FFDF1 /* KeyPoint.swift */,
+				B29E68443A46DDAADB46CDE2 /* Session.swift */,
+				A00B1BA84D01AC5F09080CF6 /* VideoEnums.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D7E9DBC87861C20D01A29985 /* VIR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72805FEDA1595E3C57EE06CC /* Build configuration list for PBXNativeTarget "VIR" */;
+			buildPhases = (
+				D3DDD3B9AE579DAC8912562F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VIR;
+			packageProductDependencies = (
+			);
+			productName = VIR;
+			productReference = D11A1A50D8CEE48E5D9E2E8F /* VIR.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1041DCAC1A22485A0F85D0F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					D7E9DBC87861C20D01A29985 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 10431A682CD06BBC13EE8A36 /* Build configuration list for PBXProject "VIR" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 1CF11D027C10DE69EA77F74A;
+			minimizedProjectReferenceProxies = 1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D7E9DBC87861C20D01A29985 /* VIR */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D3DDD3B9AE579DAC8912562F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				422FE72C9F00808FAC710732 /* AppSettings.swift in Sources */,
+				EEB8BB0F6B5BE82E1BF14372 /* AppState.swift in Sources */,
+				4DEB42C25E0ACF57EECD9527 /* ArrowHit.swift in Sources */,
+				5D7869765B22718704AA0852 /* AutoClipper.swift in Sources */,
+				36741B894CAAE7A3A6AA50EE /* CameraManager.swift in Sources */,
+				8C81F3749AE027ED9876656E /* CameraPreviewView.swift in Sources */,
+				0B3CE81D75349B6F5BEED1CD /* CameraSettingsView.swift in Sources */,
+				D1E2F3A4B5C6D7E8F9A0B1C2 /* DebugOverlay.swift in Sources */,
+				A2314534136B23DDF114C083 /* CameraViewModel.swift in Sources */,
+				16E521C132A1689A22485E34 /* CircularFrameBuffer.swift in Sources */,
+				1A2B3C4D5E6F7A8B9C0D1E2F /* CompressedFrameBuffer.swift in Sources */,
+				07B57015C06B992800F24DEA /* Clip.swift in Sources */,
+				2B3C4D5E6F7A8B9C0D1E2F3A /* DiskRecorder.swift in Sources */,
+				C39B12A8CEDCA203298234A8 /* ClipListView.swift in Sources */,
+				0035D1AB3080638DEFDB11DB /* Constants.swift in Sources */,
+				B4B330632560BF159BB2E874 /* DelayedPlaybackView.swift in Sources */,
+				44A5A23DFCD83BE32B1EC131 /* Extensions.swift in Sources */,
+				F369F3F61754D6F5E6E79A0F /* KeyPoint.swift in Sources */,
+				CC4C815317FD2EF4FD8F53F8 /* KeyPointMarker.swift in Sources */,
+				12384D477F18A1C39DDE5BB1 /* MainCameraScreen.swift in Sources */,
+				A2839BDDAD612216CACDC390 /* MarkingFeedbackView.swift in Sources */,
+				F779CC08456FF5BBD33029DA /* PostSessionView.swift in Sources */,
+				953411B999885078B09B4DB4 /* ReplayPlayerView.swift in Sources */,
+				6FF0FD5D34012212C151F931 /* ReplayViewModel.swift in Sources */,
+				D80CCE397243900C1F84EF1A /* Session.swift in Sources */,
+				EE1C5C795EDCAAF779EC252B /* VIRApp.swift in Sources */,
+				12C14C21370649C947787FA8 /* VideoEnums.swift in Sources */,
+				638B7C87CD6216EB1E19C741 /* VolumeButtonHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2EF5076BE143087E13747BD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "VIR needs camera access to provide delayed video playback for training analysis.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		62ED394B30D7AD46343E6913 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99D3Q9BWMJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.vir;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA965084741933C4B38E9CDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 99D3Q9BWMJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.vir;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AF62305C9C6A25A6E097B7DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "VIR needs camera access to provide delayed video playback for training analysis.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10431A682CD06BBC13EE8A36 /* Build configuration list for PBXProject "VIR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EF5076BE143087E13747BD1 /* Debug */,
+				AF62305C9C6A25A6E097B7DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72805FEDA1595E3C57EE06CC /* Build configuration list for PBXNativeTarget "VIR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62ED394B30D7AD46343E6913 /* Debug */,
+				AA965084741933C4B38E9CDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1041DCAC1A22485A0F85D0F7 /* Project object */;
+}
