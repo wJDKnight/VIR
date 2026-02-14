@@ -37,4 +37,8 @@ class Session {
         self.totalScore = totalScore
         self.targetFaceType = targetFaceType
     }
+
+    var totalSize: Int64 {
+        clips.reduce(0) { $0 + $1.fileSize }
+    }
 }

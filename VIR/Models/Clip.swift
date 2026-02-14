@@ -7,7 +7,8 @@ class Clip {
     var sessionId: UUID
     var startTime: TimeInterval
     var endTime: TimeInterval
-    var fileURL: URL?           // nil until exported to disk
+    var fileName: String?       // Store filename relative to VIRConstants.clipsDirectory
+    var fileSize: Int64         // Size in bytes
     var linkedArrowHitId: UUID?
 
     init(
@@ -15,15 +16,23 @@ class Clip {
         sessionId: UUID,
         startTime: TimeInterval,
         endTime: TimeInterval,
-        fileURL: URL? = nil,
+        fileName: String? = nil,
+        fileSize: Int64 = 0,
         linkedArrowHitId: UUID? = nil
     ) {
         self.id = id
         self.sessionId = sessionId
         self.startTime = startTime
         self.endTime = endTime
-        self.fileURL = fileURL
+        self.fileName = fileName
+        self.fileSize = fileSize
         self.linkedArrowHitId = linkedArrowHitId
+    }
+
+    /// Reconstructs the full file URL from the stored filename
+    var fileURL: URL? {
+        guard let fileName = fileName else { return nil }
+        return VIRConstants.clipsDirectory.appendingPathComponent(fileName)
     }
 
     var durationText: String {

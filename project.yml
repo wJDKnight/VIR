@@ -13,6 +13,7 @@ settings:
     TARGETED_DEVICE_FAMILY: "1,2"  # iPhone + iPad
     GENERATE_INFOPLIST_FILE: true
     INFOPLIST_KEY_NSCameraUsageDescription: "VIR needs camera access to provide delayed video playback for training analysis."
+    INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "VIR needs access to save video clips to your photo library."
     INFOPLIST_KEY_UILaunchScreen_Generation: true
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"

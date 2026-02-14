@@ -229,6 +229,7 @@ class CameraViewModel {
                 from: fileURL,
                 keyPoints: keyPoints,
                 sessionId: sessionId,
+                sessionStartTime: self.startTime ?? Date(),
                 fps: recordingFps
             )
             await MainActor.run {

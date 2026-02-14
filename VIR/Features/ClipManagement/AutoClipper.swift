@@ -23,6 +23,7 @@ class AutoClipper {
         from recordingURL: URL,
         keyPoints: [KeyPoint],
         sessionId: UUID,
+        sessionStartTime: Date,
         fps: Int
     ) async throws -> ClipResult {
         let sortedMarks = keyPoints.sorted { $0.timestamp < $1.timestamp }
@@ -36,6 +37,11 @@ class AutoClipper {
 
         var clips: [Clip] = []
         var fileURLs: [URL] = []
+
+        // Date formatter for filename
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd_HHmmss"
+        let dateString = formatter.string(from: sessionStartTime)
 
         for (index, mark) in sortedMarks.enumerated() {
             let clipStartTime: TimeInterval
@@ -53,7 +59,9 @@ class AutoClipper {
             guard clipStartTime < clampedEnd else { continue }
 
             // Generate output file URL
-            let fileName = "clip_\(index)_\(UUID().uuidString.prefix(8)).mp4"
+            // Format: yyyyMMdd_HHmmss_01.mp4 (1-based index)
+            let orderNumber = String(format: "%02d", index + 1)
+            let fileName = "\(dateString)_\(orderNumber).mp4"
             let fileURL = VIRConstants.clipsDirectory.appendingPathComponent(fileName)
             try? FileManager.default.removeItem(at: fileURL)
 
@@ -69,12 +77,17 @@ class AutoClipper {
             )
 
             fileURLs.append(fileURL)
+            
+            // Get file size
+            let resources = try? fileURL.resourceValues(forKeys: [.fileSizeKey])
+            let fileSize = Int64(resources?.fileSize ?? 0)
 
             let clip = Clip(
                 sessionId: sessionId,
                 startTime: clipStartTime,
                 endTime: clampedEnd,
-                fileURL: fileURL
+                fileName: fileName,
+                fileSize: fileSize
             )
             clips.append(clip)
 

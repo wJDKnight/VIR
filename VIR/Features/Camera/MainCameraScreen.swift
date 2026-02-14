@@ -4,9 +4,11 @@ import SwiftUI
 struct MainCameraScreen: View {
     @Environment(AppState.self) private var appState
     @Environment(AppSettings.self) private var settings
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = CameraViewModel()
     @State private var volumeHandler = VolumeButtonHandler()
     @State private var showSettings = false
+    @State private var showHistory = false
     @State private var showDebug = false
 
     var body: some View {
@@ -121,6 +123,14 @@ struct MainCameraScreen: View {
                         .padding(.vertical, 6)
                         .background(.black.opacity(0.5))
                         .clipShape(Capsule())
+
+                        // Mark Count Badge
+                        if viewModel.markCount > 0 {
+                            HUDBadge(
+                                icon: "flag.fill",
+                                text: "\(viewModel.markCount)"
+                            )
+                        }
                     }
 
                     Spacer()
@@ -163,17 +173,23 @@ struct MainCameraScreen: View {
 
                 // Bottom bar
                 HStack {
-                    // Mark count badge
-                    if viewModel.isRecording && viewModel.markCount > 0 {
-                        HUDBadge(
-                            icon: "flag.fill",
-                            text: "\(viewModel.markCount)"
-                        )
+                    // History Button (Left)
+                    Button {
+                        showHistory = true
+                    } label: {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .padding(10)
+                            .background(.black.opacity(0.5))
+                            .clipShape(Circle())
                     }
+                    .disabled(viewModel.isRecording)
+                    .opacity(viewModel.isRecording ? 0.4 : 1)
 
                     Spacer()
 
-                    // Mark button (center)
+                    // Mark button (center-left)
                     if viewModel.isRecording {
                         Button {
                             viewModel.addMark(source: .onScreenButton, appState: appState)
@@ -189,11 +205,14 @@ struct MainCameraScreen: View {
                                         .strokeBorder(.yellow.opacity(0.5), lineWidth: 2)
                                 }
                         }
+                    } else {
+                         // Spacer to balance layout when not recording
+                         Spacer().frame(width: VIRConstants.buttonSize)
                     }
 
                     Spacer()
 
-                    // Start / Stop button
+                    // Start / Stop button (Center)
                     Button {
                         if viewModel.isRecording {
                             stopSession()
@@ -224,6 +243,17 @@ struct MainCameraScreen: View {
                                 .clipShape(Circle())
                         }
                     }
+
+                    Spacer()
+                    
+                    // Mark count badge (Hidden placeholder to balance layout)
+                     Spacer().frame(width: VIRConstants.buttonSize)
+
+                     Spacer()
+
+                    // Settings button (Right) -> moved to bottom right for symmetry? 
+                    // No, let's keep Settings top right and put History top left? 
+                    // Actually, let's put History bottom left.
                 }
                 .padding(.horizontal, VIRConstants.hudPadding)
                 .padding(.bottom, 20)
@@ -256,6 +286,11 @@ struct MainCameraScreen: View {
                 }
             )
         }
+        .sheet(isPresented: $showHistory) {
+            NavigationStack {
+                SessionListView()
+            }
+        }
         .statusBarHidden(viewModel.isRecording)
         .persistentSystemOverlays(viewModel.isRecording ? .hidden : .automatic)
     }
@@ -271,15 +306,26 @@ struct MainCameraScreen: View {
     private func stopSession() {
         volumeHandler.deactivate()
         let keyPoints = appState.currentKeyPoints
-        let sessionId = appState.currentSession?.id ?? UUID()
+        guard let session = appState.currentSession else { return }
+        
         Task {
             await viewModel.stopRecording()
             appState.recordingFileURL = viewModel.recordingFileURL
             appState.stopSession()
 
             // Generate clips from the saved recording file
-            await viewModel.generateClips(keyPoints: keyPoints, sessionId: sessionId)
-            appState.savedClips = viewModel.savedClips
+            await viewModel.generateClips(keyPoints: keyPoints, sessionId: session.id)
+            let clips = viewModel.savedClips
+            appState.savedClips = clips
+            
+            // Update Session and Save to SwiftData
+            session.clips = clips
+            session.duration = viewModel.elapsedTime
+            // session.totalScore = ... (future)
+            
+            modelContext.insert(session)
+            try? modelContext.save()
+            print("Session saved with \(clips.count) clips")
         }
     }
 

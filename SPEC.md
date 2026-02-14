@@ -87,14 +87,7 @@ VIR (Video Instant Replay) is a hands-free, privacy-first iOS app that provides 
 | Dynamic Buffer             | Automatically adjusts buffer size based on available RAM and selected resolution |
 | Audio Toggle               | Disable audio capture so users can listen to music/podcasts from other apps      |
 
-#### 3.1.1 Buffer Management
-- **Storage:** RAM-only (never written to disk during capture)
-- **Auto-clear:** Buffer is purged when the app moves to background or closes
-- **Dynamic sizing:** The app calculates maximum buffer duration on launch based on:
-  - Available device RAM
-  - Selected resolution and frame rate
-  - Displays maximum available buffer time to the user
-- **Warning:** Alert user when buffer is approaching capacity
+
 
 #### 3.1.2 Key Point Marking
 - **Trigger Methods:**
@@ -382,18 +375,6 @@ The core of the delay mode is a **circular (ring) buffer** that holds video fram
 
 ---
 
-## 7. Privacy & Security
-
-| Requirement       | Implementation                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------- |
-| No Registration   | App is fully functional without account creation                                      |
-| No Cloud Uploads  | Zero network calls for video data; all processing is on-device                        |
-| RAM-Only Buffer   | Video frames are stored in RAM only; never written to disk during capture             |
-| Auto-Clear        | Buffer is purged on `applicationWillResignActive` and `applicationDidEnterBackground` |
-| GDPR Compliant    | No personal data collected; no analytics SDK; privacy policy accessible in-app        |
-| Camera Permission | Standard iOS permission dialog; app explains usage in `Info.plist`                    |
-| No Tracking       | No IDFA or telemetry (third-party SDKs allowed for functionality)                     |
-
 ---
 
 ## 8. Performance Requirements
@@ -514,6 +495,11 @@ struct KeyPoint {
 - [x] Auto-clipping on stop
 - [x] Basic replay view (play, pause, scrub)
 - [x] Settings (delay, resolution, fps)
+- [ ] save session (video clips) to file
+- [ ] load session from file
+- [ ] show the storage size of all the files
+- [ ] enable the user to delete the files
+- [ ] enable the user to output clips to photo library
 
 ### Phase 2 — Analysis & Scoring
 - [ ] Slow-motion playback (0.25x–2x)
