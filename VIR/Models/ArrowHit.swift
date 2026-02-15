@@ -17,6 +17,9 @@ class ArrowHit {
     
     var linkedClipId: UUID?
     
+    // Inverse relationship
+    var session: Session?
+    
     init(
         id: UUID = UUID(),
         sessionId: UUID = UUID(),

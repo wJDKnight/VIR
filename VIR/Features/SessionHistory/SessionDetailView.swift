@@ -2,11 +2,19 @@ import SwiftUI
 import AVKit
 
 struct SessionDetailView: View {
-    let session: Session
+    @Bindable var session: Session
     @State private var exportStatus: String?
     
     var body: some View {
         List {
+            Section("Details") {
+                TextField("Title", text: $session.title)
+                    .font(.headline)
+                
+                TextField("Notes", text: $session.note, axis: .vertical)
+                    .lineLimit(2...6)
+            }
+
             if !session.arrowHits.isEmpty {
                 Section {
                     HStack {
@@ -17,10 +25,20 @@ struct SessionDetailView: View {
                             
                             // Hit Markers
                             GeometryReader { geometry in
+                                let size = min(geometry.size.width, geometry.size.height)
+                                let pixelsPerCm = size / session.targetFaceType.diameterCm
+                                // Use a default arrow size if specific session logical doesn't store it?
+                                // Session doesn't store arrow diameter, assumes global setting or I need to add it to session?
+                                // For now use current settings or a default.
+                                // Ideally Session should record the arrow diameter used.
+                                // But for now read from AppSettings (current) is the best proxy or fallback.
+                                let arrowDiameterMm = AppSettings.shared.arrowDiameterMm
+                                let arrowDiameterPx = (arrowDiameterMm / 10.0) * pixelsPerCm
+                                
                                 ForEach(session.arrowHits) { hit in
                                     Circle()
                                         .fill(Color.green)
-                                        .frame(width: 8, height: 8)
+                                        .frame(width: arrowDiameterPx, height: arrowDiameterPx)
                                         .position(
                                             x: hit.x * geometry.size.width,
                                             y: hit.y * geometry.size.height
@@ -71,7 +89,7 @@ struct SessionDetailView: View {
             }
         }
         }
-        .navigationTitle(session.date.formatted(date: .abbreviated, time: .shortened))
+        .navigationTitle(session.title.isEmpty ? session.date.formatted(date: .abbreviated, time: .shortened) : session.title)
         .alert("Export Status", isPresented: .constant(exportStatus != nil), actions: {
             Button("OK") { exportStatus = nil }
         }, message: {

@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Clip {
+class Clip: Identifiable {
     var id: UUID
     var sessionId: UUID
     var startTime: TimeInterval
@@ -10,7 +10,10 @@ class Clip {
     var fileName: String?       // Store filename relative to VIRConstants.clipsDirectory
     var fileSize: Int64         // Size in bytes
     var linkedArrowHitId: UUID?
-
+    
+    // Inverse relationship (unwrapped optional to allow temporary detachment)
+    var session: Session?
+    
     init(
         id: UUID = UUID(),
         sessionId: UUID,

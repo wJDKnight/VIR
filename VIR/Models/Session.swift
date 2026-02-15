@@ -9,10 +9,12 @@ class Session {
     var resolution: VideoResolution
     var fps: Int
     var delaySeconds: Double
-    @Relationship(deleteRule: .cascade) var clips: [Clip]
-    @Relationship(deleteRule: .cascade) var arrowHits: [ArrowHit]
+    @Relationship(deleteRule: .cascade, inverse: \Clip.session) var clips: [Clip]
+    @Relationship(deleteRule: .cascade, inverse: \ArrowHit.session) var arrowHits: [ArrowHit]
     var totalScore: Int?
     var targetFaceType: TargetFaceType
+    var title: String = ""
+    var note: String = ""
 
     init(
         id: UUID = UUID(),
@@ -24,7 +26,9 @@ class Session {
         clips: [Clip] = [],
         arrowHits: [ArrowHit] = [],
         totalScore: Int? = nil,
-        targetFaceType: TargetFaceType = .wa122
+        targetFaceType: TargetFaceType = .wa122,
+        title: String = "",
+        note: String = ""
     ) {
         self.id = id
         self.date = date
@@ -36,6 +40,8 @@ class Session {
         self.arrowHits = arrowHits
         self.totalScore = totalScore
         self.targetFaceType = targetFaceType
+        self.title = title
+        self.note = note
     }
 
     var totalSize: Int64 {

@@ -323,9 +323,25 @@ struct MainCameraScreen: View {
             session.duration = viewModel.elapsedTime
             // session.totalScore = ... (future)
             
+            // Restore saving here as this was the original working behavior.
+            // We use robust error handling to catch why it might fail.
+            print("Attempting to save session in MainCameraScreen...")
+            
             modelContext.insert(session)
-            try? modelContext.save()
-            print("Session saved with \(clips.count) clips")
+            
+            // Explicitly set inverse relationships (safety net)
+            for clip in clips {
+                clip.session = session
+            }
+            
+            do {
+                try modelContext.save()
+                print("✅ Session saved immediately in MainCameraScreen with \(clips.count) clips")
+            } catch {
+                print("❌ Failed to save session in MainCameraScreen: \(error.localizedDescription)")
+                let nsError = error as NSError
+                print("  - UserInfo: \(nsError.userInfo)")
+            }
         }
     }
 

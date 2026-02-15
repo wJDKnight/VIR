@@ -41,7 +41,6 @@ struct TargetFaceView: View {
         case .wa122, .wa80, .wa40:
             // Standard Single Spot
             SingleTargetFace(rings: standardWARings)
-                .padding()
         }
     }
     

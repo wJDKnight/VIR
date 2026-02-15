@@ -92,8 +92,22 @@ struct SessionRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(session.date.formatted(date: .abbreviated, time: .shortened))
-                .font(.headline)
+             HStack {
+                Text(session.title.isEmpty ? session.date.formatted(date: .abbreviated, time: .shortened) : session.title)
+                    .font(.headline)
+                
+                 if !session.note.isEmpty {
+                     Image(systemName: "note.text")
+                         .font(.caption)
+                         .foregroundStyle(.secondary)
+                 }
+            }
+            
+            if !session.title.isEmpty {
+                Text(session.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             
             HStack {
                 Label("\(session.clips.count) clips", systemImage: "film")

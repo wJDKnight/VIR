@@ -13,6 +13,7 @@
 		0B3CE81D75349B6F5BEED1CD /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8133725DC207E77DC15A765F /* CameraSettingsView.swift */; };
 		12384D477F18A1C39DDE5BB1 /* MainCameraScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1935A904F2B7416EF1EE5E89 /* MainCameraScreen.swift */; };
 		12C14C21370649C947787FA8 /* VideoEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B1BA84D01AC5F09080CF6 /* VideoEnums.swift */; };
+		14838A8C0EB44F28473B3EF7 /* SessionReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A570B74BFB3B462880D4C3E5 /* SessionReviewView.swift */; };
 		16E521C132A1689A22485E34 /* CircularFrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F813A2046CCB9C2BAFE2339 /* CircularFrameBuffer.swift */; };
 		249CBCE4E8F030227183DA1F /* ScoringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D515D795C1064D5684450D /* ScoringEngine.swift */; };
 		36741B894CAAE7A3A6AA50EE /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2357A0B382641CF59B8ABB /* CameraManager.swift */; };
@@ -27,6 +28,7 @@
 		7A7E5C08FFBEC216E140831A /* CompressedFrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D9F0F5356B1AC0183DA3EE /* CompressedFrameBuffer.swift */; };
 		8C81F3749AE027ED9876656E /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DB9F1208F661FDAAB9DC76 /* CameraPreviewView.swift */; };
 		953411B999885078B09B4DB4 /* ReplayPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845E7F173087F6A5C4FCD2C /* ReplayPlayerView.swift */; };
+		9D9E44EEEEDE167C91F84681 /* ClipPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE02E1402F24559571A1542D /* ClipPlayerView.swift */; };
 		A2314534136B23DDF114C083 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */; };
 		A2839BDDAD612216CACDC390 /* MarkingFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDD1490EDF13C4641EDD91 /* MarkingFeedbackView.swift */; };
 		B4B330632560BF159BB2E874 /* DelayedPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89178A67EEE98CEF76333EFA /* DelayedPlaybackView.swift */; };
@@ -68,6 +70,7 @@
 		A00B1BA84D01AC5F09080CF6 /* VideoEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEnums.swift; sourceTree = "<group>"; };
 		A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		A54977E00F0353ADACF36721 /* ClipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipListView.swift; sourceTree = "<group>"; };
+		A570B74BFB3B462880D4C3E5 /* SessionReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReviewView.swift; sourceTree = "<group>"; };
 		B29E68443A46DDAADB46CDE2 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		BA3DA822BF0FE1CB0D697292 /* TargetScoringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetScoringView.swift; sourceTree = "<group>"; };
 		BB0C345DDF64E01F297D69FA /* DebugOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverlay.swift; sourceTree = "<group>"; };
@@ -75,6 +78,7 @@
 		BC19B255C7C938BA1FFF67A2 /* KeyPointMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPointMarker.swift; sourceTree = "<group>"; };
 		C06111BA45F98FD83038088A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		CDF29FE86C8929B9327D2CD7 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		CE02E1402F24559571A1542D /* ClipPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipPlayerView.swift; sourceTree = "<group>"; };
 		D11A1A50D8CEE48E5D9E2E8F /* VIR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VIR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3AF021949806904FC3CFA4D /* DiskRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskRecorder.swift; sourceTree = "<group>"; };
 		E0D23074FD65E1DCCDE7A648 /* ReplayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayViewModel.swift; sourceTree = "<group>"; };
@@ -132,12 +136,14 @@
 				8133725DC207E77DC15A765F /* CameraSettingsView.swift */,
 				A129A7CDAE8F673D7AF70A74 /* CameraViewModel.swift */,
 				7F813A2046CCB9C2BAFE2339 /* CircularFrameBuffer.swift */,
+				CE02E1402F24559571A1542D /* ClipPlayerView.swift */,
 				09D9F0F5356B1AC0183DA3EE /* CompressedFrameBuffer.swift */,
 				BB0C345DDF64E01F297D69FA /* DebugOverlay.swift */,
 				89178A67EEE98CEF76333EFA /* DelayedPlaybackView.swift */,
 				D3AF021949806904FC3CFA4D /* DiskRecorder.swift */,
 				1935A904F2B7416EF1EE5E89 /* MainCameraScreen.swift */,
 				69AC5812CEF7F95F5F1BDF17 /* PostSessionView.swift */,
+				A570B74BFB3B462880D4C3E5 /* SessionReviewView.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -301,6 +307,7 @@
 				16E521C132A1689A22485E34 /* CircularFrameBuffer.swift in Sources */,
 				07B57015C06B992800F24DEA /* Clip.swift in Sources */,
 				C39B12A8CEDCA203298234A8 /* ClipListView.swift in Sources */,
+				9D9E44EEEEDE167C91F84681 /* ClipPlayerView.swift in Sources */,
 				7A7E5C08FFBEC216E140831A /* CompressedFrameBuffer.swift in Sources */,
 				0035D1AB3080638DEFDB11DB /* Constants.swift in Sources */,
 				F80AEAB73C8586B706C9FC6A /* DebugOverlay.swift in Sources */,
@@ -320,6 +327,7 @@
 				E7D702DBEB2AE44F78B3DA9B /* SessionDetailView.swift in Sources */,
 				E24A68F331A2599A1596E7FE /* SessionListView.swift in Sources */,
 				C337E808A93FC91DC57EA6BA /* SessionManager.swift in Sources */,
+				14838A8C0EB44F28473B3EF7 /* SessionReviewView.swift in Sources */,
 				C1DF820D88333FE1C2732EF0 /* TargetFaceType.swift in Sources */,
 				FF6DF2F2FB5A5573B49898B1 /* TargetFaceView.swift in Sources */,
 				614C9EF05F593264A108C1DC /* TargetScoringView.swift in Sources */,

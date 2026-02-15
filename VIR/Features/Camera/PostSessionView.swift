@@ -1,9 +1,12 @@
 import SwiftUI
+import SwiftData
+import Foundation
 
 /// Post-session view shown after stopping a recording.
 /// Displays clips that were saved during recording (at each mark).
 struct PostSessionView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedClip: Clip?
     @State private var isScoring = true
 
@@ -57,24 +60,74 @@ struct PostSessionView: View {
                     }
                 )
             } else {
-                ClipListView(
-                    clips: appState.savedClips,
-                    arrowHits: appState.currentSession?.arrowHits ?? [],
-                    onSelectClip: { clip in
-                        selectedClip = clip
+                SessionReviewView(
+                    session: appState.currentSession ?? Session(),
+                    onSave: {
+                        // Persist changes
+                        if let session = appState.currentSession {
+                            // Ensure clips are attached to the session
+                            session.clips = appState.savedClips
+                            
+                            // Explicitly set inverse relationship
+                            for clip in session.clips {
+                                clip.session = session
+                            }
+                            
+                            // Debug logging
+                            print("Saving session: \(session.id)")
+                            print("  - Title: \(session.title)")
+                            print("  - Clip count: \(session.clips.count)")
+                            print("  - Hit count: \(session.arrowHits.count)")
+                            
+                            // Update debugging
+                            print("Updating session: \(session.id)")
+                            
+                            // Session is already inserted by MainCameraScreen
+                            // But we ensure it's still tracked
+                            if session.modelContext == nil {
+                                modelContext.insert(session)
+                            }
+                            
+                            // Explicitly connect hits (these might be new)
+                            for hit in session.arrowHits {
+                                hit.session = session
+                                if hit.modelContext == nil {
+                                    modelContext.insert(hit)
+                                }
+                            }
+                            
+                            do {
+                                try modelContext.save()
+                                print("✅ Session updated successfully in Review!")
+                            } catch {
+                                print("❌ Failed to update session: \(error.localizedDescription)")
+                                // Resulting in simpler error logging to avoid compilation issues with specific keys
+                                let nsError = error as NSError
+                                print("  - UserInfo: \(nsError.userInfo)")
+                            }
+                        } else {
+                            print("❌ No active session to save!")
+                        }
+                        appState.reset()
                     },
-                    onDismiss: {
+                    onDiscard: {
+                        // Delete session and clips
+                        if let session = appState.currentSession {
+                            modelContext.delete(session)
+                            // Also cleanup file artifacts if not handled by delete rule?
+                            // Cascade rule should handle DB, but files might need manual cleanup if not using external storage manager.
+                            // For now assume Cascade deletes Clip models, but files remain?
+                            // Ideally SessionManager should handle delete to clean files.
+                            let manager = SessionManager(modelContext: modelContext)
+                            manager.deleteSession(session)
+                        }
                         appState.reset()
                     }
                 )
-                .navigationDestination(item: $selectedClip) { clip in
-                    ReplayPlayerView(clip: clip)
-                }
             }
         }
     }
 }
 
 // MARK: - Clip Identifiable conformance for navigation
-
-extension Clip: Identifiable {}
+// Conformance is now in Clip.swift
