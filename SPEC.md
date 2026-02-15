@@ -495,15 +495,15 @@ struct KeyPoint {
 - [x] Auto-clipping on stop
 - [x] Basic replay view (play, pause, scrub)
 - [x] Settings (delay, resolution, fps)
-- [ ] save session (video clips) to file
-- [ ] load session from file
-- [ ] show the storage size of all the files
-- [ ] enable the user to delete the files
-- [ ] enable the user to output clips to photo library
+- [x] save session (video clips) to file
+- [x] load session from file
+- [x] show the storage size of all the files
+- [x] enable the user to delete the files
+- [x] enable the user to output clips to photo library
 
 ### Phase 2 — Analysis & Scoring
-- [ ] Slow-motion playback (0.25x–2x)
-- [ ] Frame-by-frame stepping
+- [x] Slow-motion playback (0.25x–2x)
+- [x] Frame-by-frame stepping
 - [ ] On-screen drawing overlay
 - [ ] Angle measurement tool
 - [ ] Archery target scoring screen
