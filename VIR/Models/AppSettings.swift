@@ -17,6 +17,7 @@ class AppSettings {
         static let audioEnabled = "vir_audioEnabled"
         static let cameraSelection = "vir_cameraSelection"
         static let targetFaceType = "vir_targetFaceType"
+        static let arrowDiameterMm = "vir_arrowDiameterMm"
     }
 
     // MARK: - Properties
@@ -45,6 +46,10 @@ class AppSettings {
         didSet { defaults.set(targetFaceType.rawValue, forKey: Keys.targetFaceType) }
     }
 
+    var arrowDiameterMm: Double {
+        didSet { defaults.set(arrowDiameterMm, forKey: Keys.arrowDiameterMm) }
+    }
+
     // MARK: - Computed
 
     var delayFrameCount: Int {
@@ -61,5 +66,6 @@ class AppSettings {
         self.audioEnabled = defaults.object(forKey: Keys.audioEnabled) as? Bool ?? false
         self.cameraSelection = CameraSelection(rawValue: defaults.string(forKey: Keys.cameraSelection) ?? "") ?? .rear
         self.targetFaceType = TargetFaceType(rawValue: defaults.string(forKey: Keys.targetFaceType) ?? "") ?? .wa122
+        self.arrowDiameterMm = defaults.object(forKey: Keys.arrowDiameterMm) as? Double ?? 5.5
     }
 }

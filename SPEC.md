@@ -124,19 +124,26 @@ VIR (Video Instant Replay) is a hands-free, privacy-first iOS app that provides 
 ### 3.4 Archery-Specific Features
 
 #### 3.4.1 Target Scoring
-- **Trigger:** Automatically presented after stopping a recording session
+- coinfiguration: target type (WA 122cm, 80cm, 40cm; Vegas 3-Spot, etc.) and arrow size (diameter of the arrow: 3.1mm to 9.9mm ), this is set in the settings
+- **Trigger:** Automatically presented after stopping a recording session. this can be skipped
 - **Target Face Popup:**
-  - Standard archery target face displayed (configurable: WA 122cm, 80cm, 40cm; Vegas 3-Spot, etc.)
-  - User taps to mark where each arrow hit the target
-  - Supports multi-round sessions
+  - preset archery target face displayed 
+  - a black circle (indicating the arrow hit position) with a radius of the arrow size is displayed on the center of the target face
+  - User can move the black circle on the target face to mark where each arrow hit the target
+  - based on the circle position, the app will calculate the score
+  - after one circle is moved and placed, a new circle is displayed.
+  - the number of total circles is the number of clips in the session
+
 - **Scoring:**
   - Per-arrow score (X, 10, 9, … M)
-  - Round total and cumulative session score
+  - Round total 
   - Score history saved locally
 
 #### 3.4.2 Clip-to-Hit Linking
-- Each marked key point (clip segment) can be linked to a specific arrow hit on the target
-- Enables reviewing the shot cycle for a specific arrow score
+- Each marked key point (clip segment) can be linked to a specific arrow hit on the target based on the order of the clips and the order of the marked hits on the target face
+- each clip is linked to one arrow hit
+- each clip will have the metadata of the arrow hit, including the score, the position of the arrow hit on the target face.
+- Enables reviewing the shot cycle (the clip) for a specific arrow hit
 - Summary view: target face with arrows + linked clip thumbnails
 
 ---
@@ -504,10 +511,10 @@ struct KeyPoint {
 ### Phase 2 — Analysis & Scoring
 - [x] Slow-motion playback (0.25x–2x)
 - [x] Frame-by-frame stepping
-- [ ] On-screen drawing overlay
-- [ ] Angle measurement tool
 - [ ] Archery target scoring screen
 - [ ] Clip-to-hit linking
+- [ ] On-screen drawing overlay
+- [ ] Angle measurement tool
 - [ ] Trim & export clips
 
 ### Phase 3 — Advanced Features

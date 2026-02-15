@@ -84,6 +84,15 @@ struct CameraSettingsView: View {
                             Text(face.displayName).tag(face)
                         }
                     }
+                    
+                    HStack {
+                        Text("Arrow Diameter")
+                        Spacer()
+                        Text(String(format: "%.1f mm", settings.arrowDiameterMm))
+                            .foregroundStyle(.secondary)
+                        Stepper("", value: $settings.arrowDiameterMm, in: 3.0...10.0, step: 0.1)
+                            .labelsHidden()
+                    }
                 }
             }
             .navigationTitle("Settings")
