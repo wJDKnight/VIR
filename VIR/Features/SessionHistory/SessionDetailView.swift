@@ -3,6 +3,7 @@ import AVKit
 
 struct SessionDetailView: View {
     @Bindable var session: Session
+    @Environment(\.modelContext) private var modelContext
     @State private var exportStatus: String?
     
     var body: some View {
@@ -84,6 +85,13 @@ struct SessionDetailView: View {
                             Label("Save", systemImage: "square.and.arrow.up")
                         }
                         .tint(.blue)
+                        
+                        Button(role: .destructive) {
+                            let manager = SessionManager(modelContext: modelContext)
+                            manager.deleteClip(clip, from: session)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
             }

@@ -32,14 +32,64 @@ struct SessionReviewView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
+            List {
+                Section {
                     titleAndNoteSection
-                    targetSection
-                    clipsListSection
                 }
-                .padding(.bottom, 40)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+                
+                Section {
+                    targetSection
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+                
+                Section("Clips (\(session.clips.count))") {
+                    ForEach(sortedClips, id: \.id) { clip in
+                        NavigationLink(destination: ClipPlayerView(clip: clip)) {
+                           HStack {
+                               VStack(alignment: .leading) {
+                                   Text("Clip \(clip.durationText)") // Using duration or index? sortedClips loses index if not enumerated
+                                            // But since we want "Clip 1, Clip 2", we need index.
+                                            // Let's use enumerated() in ForEach or derive index.
+                                            // SwiftUI List ForEach with index:
+                                            // We can find index in sortedClips.
+                                   let index = sortedClips.firstIndex(where: {$0.id == clip.id}) ?? 0
+                                   
+                                   Text("Clip \(index + 1)")
+                                       .font(.body)
+                                       .foregroundColor(.primary)
+                                   Text(clip.durationText)
+                                       .font(.caption)
+                                       .foregroundStyle(.secondary)
+                               }
+                               Spacer()
+                               
+                               if let hitId = clip.linkedArrowHitId,
+                                  let hit = session.arrowHits.first(where: { $0.id == hitId }) {
+                                   Text(hit.scoreDisplay)
+                                       .bold()
+                                       .padding(6)
+                                       .background(Color.green.opacity(0.1))
+                                       .cornerRadius(4)
+                                       .foregroundColor(.primary)
+                               }
+                           }
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                let manager = SessionManager(modelContext: modelContext)
+                                manager.deleteClip(clip, from: session)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
+                }
             }
+            .listStyle(.plain)
+            .padding(.bottom, 40)
             .navigationTitle("Review Session")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -145,50 +195,7 @@ struct SessionReviewView: View {
         }
     }
 
-    @ViewBuilder
-    private var clipsListSection: some View {
-        let clips = sortedClips
-        VStack(alignment: .leading) {
-            Text("Clips (\(session.clips.count))")
-                .font(.headline)
-                .padding(.horizontal)
-            
-            ForEach(0..<clips.count, id: \.self) { index in
-                let clip = clips[index]
-                NavigationLink(destination: ClipPlayerView(clip: clip)) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Clip \(index + 1)") // Correct naming
-                                .font(.body)
-                                .foregroundColor(.primary)
-                            Text(clip.durationText)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        
-                        // Show linked score if available
-                        if let hitId = clip.linkedArrowHitId,
-                           let hit = session.arrowHits.first(where: { $0.id == hitId }) {
-                            Text(hit.scoreDisplay)
-                                .bold()
-                                .padding(6)
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(4)
-                                .foregroundColor(.primary)
-                        } else {
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.05))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                }
-            }
-        }
-    }
+
     
     private var targetInteractionView: some View {
         GeometryReader { geometry in
