@@ -47,7 +47,7 @@ struct SessionReviewView: View {
                 
                 Section("Clips (\(session.clips.count))") {
                     ForEach(sortedClips, id: \.id) { clip in
-                        NavigationLink(destination: ClipPlayerView(clip: clip)) {
+                        NavigationLink(destination: ClipReplayView(clip: clip)) {
                            HStack {
                                VStack(alignment: .leading) {
                                    Text("Clip \(clip.durationText)") // Using duration or index? sortedClips loses index if not enumerated

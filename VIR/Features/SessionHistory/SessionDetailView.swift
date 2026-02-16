@@ -67,7 +67,7 @@ struct SessionDetailView: View {
             
             Section("Clips") {
                 ForEach(session.clips) { clip in
-            NavigationLink(destination: ReplayPlayerView(clip: clip)) {
+            NavigationLink(destination: ClipReplayView(clip: clip)) {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Clip \(clip.durationText)")

@@ -1,59 +1,65 @@
 import SwiftUI
 import AVKit
 
-/// Video replay player with scrubber, speed control, and frame stepping.
-struct ReplayPlayerView: View {
-    @State private var viewModel = ReplayViewModel()
+/// A reusable view for playing back clips using ReplayViewModel.
+/// Replaces ClipPlayerView and ReplayPlayerView.
+struct ClipReplayView: View {
     let clip: Clip
+    @State private var viewModel = ReplayViewModel()
     @Environment(\.dismiss) private var dismiss
-
+    
+    // Optional: Auto-play on appear
+    var autoPlay: Bool = true
+    
     var body: some View {
         VStack(spacing: 0) {
-            // MARK: - Video Player
-            if let player = viewModel.player {
-                VideoPlayer(player: player)
-                    .ignoresSafeArea(edges: .top)
-            } else {
-                Color.black
-                    .overlay {
-                        ProgressView()
-                            .tint(.white)
-                    }
+            // MARK: - Video Player Area
+             ZStack {
+                Color.black.edgesIgnoringSafeArea(.all)
+                
+                if let player = viewModel.player {
+                    VideoPlayer(player: player)
+                        .ignoresSafeArea(edges: .top)
+                } else {
+                    ContentUnavailableView("Loading Video...", systemImage: "video")
+                }
             }
-
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
             // MARK: - Controls
             VStack(spacing: 12) {
-                // Timeline scrubber
+                // Scrubber
                 VStack(spacing: 4) {
                     Slider(
                         value: Binding(
                             get: { viewModel.currentTime },
                             set: { viewModel.seek(to: $0) }
                         ),
-                        in: 0...max(viewModel.duration, 0.1)
+                        in: 0...max(viewModel.duration, 0.01)
                     )
                     .tint(.orange)
-
+                    
                     HStack {
-                        Text(viewModel.currentTime.preciseText)
+                        Text(formatTime(viewModel.currentTime))
                             .font(.caption.monospacedDigit())
                         Spacer()
-                        Text(viewModel.duration.preciseText)
+                        Text(formatTime(viewModel.duration))
                             .font(.caption.monospacedDigit())
                     }
                     .foregroundStyle(.secondary)
                 }
-
-                // Playback controls
+                .padding(.horizontal)
+                
+                // Playback Buttons
                 HStack(spacing: 32) {
-                    // Frame step backward
+                    // Frame Background
                     Button {
                         viewModel.stepBackward()
                     } label: {
                         Image(systemName: "backward.frame.fill")
                             .font(.title2)
                     }
-
+                    
                     // Play / Pause
                     Button {
                         viewModel.togglePlayPause()
@@ -61,8 +67,8 @@ struct ReplayPlayerView: View {
                         Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                             .font(.system(size: 48))
                     }
-
-                    // Frame step forward
+                    
+                    // Frame Forward
                     Button {
                         viewModel.stepForward()
                     } label: {
@@ -71,13 +77,13 @@ struct ReplayPlayerView: View {
                     }
                 }
                 .foregroundStyle(.white)
-
-                // Speed control
+                
+                // Speed Control
                 HStack(spacing: 8) {
                     Text("Speed:")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-
+                    
                     ForEach(viewModel.availableRates, id: \.self) { rate in
                         Button {
                             viewModel.setRate(rate)
@@ -88,8 +94,8 @@ struct ReplayPlayerView: View {
                                 .padding(.vertical, 4)
                                 .background(
                                     viewModel.playbackRate == rate
-                                        ? Color.orange
-                                        : Color.gray.opacity(0.3)
+                                    ? Color.orange
+                                    : Color.gray.opacity(0.3)
                                 )
                                 .clipShape(Capsule())
                         }
@@ -104,15 +110,23 @@ struct ReplayPlayerView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("Replay")
+                Text("Clip Replay")
                     .font(.headline)
+                    .foregroundStyle(.white)
             }
         }
         .onAppear {
-            viewModel.loadClip(clip)
+            viewModel.loadClip(clip, autoPlay: autoPlay)
         }
         .onDisappear {
             viewModel.cleanup()
         }
+    }
+    
+    private func formatTime(_ seconds: Double) -> String {
+        let m = Int(seconds) / 60
+        let s = Int(seconds) % 60
+        let ms = Int((seconds.truncatingRemainder(dividingBy: 1)) * 100)
+        return String(format: "%02d:%02d.%02d", m, s, ms)
     }
 }

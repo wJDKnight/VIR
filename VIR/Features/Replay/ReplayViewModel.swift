@@ -18,18 +18,19 @@ class ReplayViewModel {
 
     // MARK: - Load
 
-    func loadClip(_ clip: Clip) {
+    func loadClip(_ clip: Clip, autoPlay: Bool = false) {
         guard let url = clip.fileURL else { return }
         let playerItem = AVPlayerItem(url: url)
-        player = AVPlayer(playerItem: playerItem)
+        
+        // Ensure we replace current item if player exists or create new one
+        if player == nil {
+            player = AVPlayer(playerItem: playerItem)
+        } else {
+            player?.replaceCurrentItem(with: playerItem)
+        }
 
         // Observe time
-        let interval = CMTime(seconds: 0.05, preferredTimescale: 600)
-        timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
-            MainActor.assumeIsolated {
-                self?.currentTime = time.seconds
-            }
-        }
+        setupTimeObserver()
 
         // Get duration
         Task { @MainActor in
@@ -37,11 +38,41 @@ class ReplayViewModel {
                 self.duration = dur.seconds
             }
         }
+        
+        if autoPlay {
+            play()
+        }
+    }
+
+    private func setupTimeObserver() {
+        if let existing = timeObserver {
+            player?.removeTimeObserver(existing)
+        }
+        
+        let interval = CMTime(seconds: 0.05, preferredTimescale: 600)
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            MainActor.assumeIsolated {
+                guard let self = self else { return }
+                self.currentTime = time.seconds
+                
+                // Check for end of playback
+                if let item = self.player?.currentItem,
+                   abs(time.seconds - item.duration.seconds) < 0.1,
+                   self.isPlaying {
+                    self.isPlaying = false
+                }
+            }
+        }
     }
 
     // MARK: - Controls
 
     func play() {
+        // If at end, restart
+        if abs(currentTime - duration) < 0.1 && duration > 0 {
+            seek(to: 0)
+        }
+        
         player?.rate = playbackRate
         isPlaying = true
     }
