@@ -12,6 +12,7 @@ struct DrawingCanvasView: UIViewRepresentable {
         canvas.backgroundColor = .clear
         canvas.isOpaque = false // Transparent background
         canvas.delegate = context.coordinator
+        canvas.contentInsetAdjustmentBehavior = .never // Prevent safe area auto-adjustment
         
         // Hide the default tool picker if we manage tools manually
         // But typically we want the default tool picker for full features.

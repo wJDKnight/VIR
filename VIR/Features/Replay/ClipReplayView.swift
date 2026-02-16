@@ -21,36 +21,42 @@ struct ClipReplayView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             // MARK: - Video Player Area
-             ZStack {
-                Color.black.edgesIgnoringSafeArea(.all)
-                
-                if let player = viewModel.player {
-                    VideoPlayer(player: player)
-                        .ignoresSafeArea(edges: .top)
-                } else {
-                    ContentUnavailableView("Loading Video...", systemImage: "video")
+             GeometryReader { proxy in
+                 ZStack {
+                    Color.black
+                    
+                    if proxy.size.width > 0 && proxy.size.height > 0 {
+                        if let player = viewModel.player {
+                            VideoPlayer(player: player)
+                                .frame(width: proxy.size.width, height: proxy.size.height)
+                        } else {
+                            ContentUnavailableView("Loading Video...", systemImage: "video")
+                                .frame(width: proxy.size.width, height: proxy.size.height)
+                        }
+                         
+                        // Drawing Overlay
+                        if isDrawing {
+                            DrawingCanvasView(
+                                drawing: $drawing,
+                                tool: currentTool,
+                                isUserInteractionEnabled: true
+                            )
+                            .allowsHitTesting(true)
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                        } else if !drawing.bounds.isEmpty {
+                             // Read-only drawing
+                            DrawingCanvasView(
+                                drawing: $drawing,
+                                tool: currentTool,
+                                isUserInteractionEnabled: false
+                            )
+                            .allowsHitTesting(false)
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                         }
+                    }
                 }
-                 
-                // Drawing Overlay
-                if isDrawing {
-                    DrawingCanvasView(
-                        drawing: $drawing,
-                        tool: currentTool,
-                        isUserInteractionEnabled: true
-                    )
-                    .allowsHitTesting(true) // Ensure it receives touches
-                } else if !drawing.bounds.isEmpty {
-                     // Show drawing even if not "isDrawing" mode (read-only)
-                    DrawingCanvasView(
-                        drawing: $drawing,
-                        tool: currentTool,
-                        isUserInteractionEnabled: false
-                    )
-                    .allowsHitTesting(false)
-                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+            .ignoresSafeArea()
             // MARK: - Controls
             // Controls overlay
             if isDrawing {
@@ -143,7 +149,9 @@ struct ClipReplayView: View {
                 .transition(.move(edge: .bottom))
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black)
+        .ignoresSafeArea()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {

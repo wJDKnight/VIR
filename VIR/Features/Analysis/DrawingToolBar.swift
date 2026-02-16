@@ -34,30 +34,45 @@ struct DrawingToolBar: View {
             Slider(value: $lineWidth, in: 2...20)
                 .frame(width: 100)
             
-            // MARK: - Actions
-            Spacer()
+
             
-            Button("Clear") {
+            Button {
                 drawing = PKDrawing()
+            } label: {
+                Image(systemName: "trash.circle")
+                    .font(.title2)
+                    .foregroundStyle(.red)
             }
             
-            Button("Save As Template") {
+            Button {
                 newTemplateName = "Reference \(Date().formatted(date: .numeric, time: .shortened))"
                 showSaveDialog = true
+            } label: {
+                Image(systemName: "square.and.arrow.down.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
             }
             
-            Button("Load Template") {
+            Button {
                 showLoadDialog = true
+            } label: {
+                Image(systemName: "folder.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
             }
             
-            Button("Done") {
+            Button {
                 withAnimation {
                     isDrawing = false
                 }
+            } label: {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.green)
             }
-            .fontWeight(.bold)
         }
         .padding()
+        .frame(minWidth: 300) // Increase width to stabilize layout
         .background(.ultraThinMaterial)
         .cornerRadius(12)
         .onChange(of: selectedColor) { updateTool() }
