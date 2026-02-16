@@ -511,8 +511,8 @@ struct KeyPoint {
 ### Phase 2 — Analysis & Scoring
 - [x] Slow-motion playback (0.25x–2x)
 - [x] Frame-by-frame stepping
-- [ ] Archery target scoring screen
-- [ ] Clip-to-hit linking
+- [x] Archery target scoring screen
+- [x] Clip-to-hit linking
 - [ ] On-screen drawing overlay
 - [ ] Angle measurement tool
 - [ ] Trim & export clips

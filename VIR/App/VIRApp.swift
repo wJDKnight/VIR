@@ -11,7 +11,7 @@ struct VIRApp: App {
             ContentView()
                 .environment(appState)
                 .environment(settings)
-                .modelContainer(for: [Session.self, Clip.self, ArrowHit.self])
+                .modelContainer(for: [Session.self, Clip.self, ArrowHit.self, ReferenceDrawing.self])
         }
     }
 }
