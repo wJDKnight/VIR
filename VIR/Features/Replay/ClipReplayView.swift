@@ -19,7 +19,7 @@ struct ClipReplayView: View {
     var autoPlay: Bool = true
     
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack(alignment: .bottom) {
             // MARK: - Video Player Area
              ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
@@ -50,20 +50,18 @@ struct ClipReplayView: View {
                  }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay(alignment: .bottom) {
-                if isDrawing {
-                    DrawingToolBar(
-                        currentTool: $currentTool,
-                        isDrawing: $isDrawing,
-                        drawing: $drawing
-                    )
-                    .transition(.move(edge: .bottom))
-                    .padding()
-                }
-            }
             
             // MARK: - Controls
-            if !isDrawing {
+            // Controls overlay
+            if isDrawing {
+                DrawingToolBar(
+                    currentTool: $currentTool,
+                    isDrawing: $isDrawing,
+                    drawing: $drawing
+                )
+                .transition(.move(edge: .bottom))
+                .padding()
+            } else {
                 VStack(spacing: 12) {
                     // Scrubber
                     VStack(spacing: 4) {
