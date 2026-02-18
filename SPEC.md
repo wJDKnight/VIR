@@ -513,16 +513,18 @@ struct KeyPoint {
 - [x] Frame-by-frame stepping
 - [x] Archery target scoring screen
 - [x] Clip-to-hit linking
-- [ ] On-screen drawing overlay
+- [x] On-screen drawing overlay
+- [ ] in history detail view, show the scores of the clips
+- [ ] when export the clips, save the scores in the filename
 - [ ] Angle measurement tool
 - [ ] Trim & export clips
 
 ### Phase 3 — Advanced Features
-- [ ] Split screen / versus mode
+- [ ] Split screen / versus mode, pick two clips to compare
 - [ ] Stopwatch overlay
 - [ ] Motion detection grid
 - [ ] Horizontal flip and rotation
-- [ ] Session history with SwiftData persistence
+- [x] Session history with SwiftData persistence
 - [ ] Annotation saving
 
 ### Phase 4 — Polish & Launch
