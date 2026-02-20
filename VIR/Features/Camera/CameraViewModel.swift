@@ -33,6 +33,7 @@ class CameraViewModel {
     private var startTime: Date?
     private var timerTask: Task<Void, Never>?
     private var permissionObserver: AnyCancellable?
+    private var orientationObserver: AnyCancellable?   // <--- Add this
 
     private var recordingFps: Int = 30
     private var recordingResolution: VideoResolution = .p720
@@ -60,12 +61,17 @@ class CameraViewModel {
         )
         maxBufferDuration = estimate.maxDuration
 
-        // Use portrait dimensions since camera output is rotated 90° to portrait
+        // Use dimensions matching the tracked device orientation
+        let orientation = cameraManager.currentOrientation
+        let isLandscape = orientation == .landscapeLeft || orientation == .landscapeRight
+        let bufferWidth = isLandscape ? settings.resolution.width : settings.resolution.height
+        let bufferHeight = isLandscape ? settings.resolution.height : settings.resolution.width
+        
         compressedBuffer = CompressedFrameBuffer(
             capacity: bufferCapacity,
             delayFrameCount: delayFrames,
-            width: settings.resolution.height,
-            height: settings.resolution.width,
+            width: bufferWidth,
+            height: bufferHeight,
             fps: fps
         )
 
@@ -92,6 +98,30 @@ class CameraViewModel {
                 }
             }
 
+        // Observe orientation changes to adjust buffer dimensions
+        orientationObserver = cameraManager.$currentOrientation
+            .receive(on: DispatchQueue.main)
+            .dropFirst() // Ignore the initial value from setup
+            .sink { [weak self] newOrientation in
+                guard let self = self, !self.isRecording else { return }
+                
+                // If the app is active and we are NOT recording, recreate the compressed buffer 
+                // to match the new physical dimensions sent by the camera output.
+                let isLandscape = newOrientation == .landscapeLeft || newOrientation == .landscapeRight
+                let bufferWidth = isLandscape ? self.recordingResolution.width : self.recordingResolution.height
+                let bufferHeight = isLandscape ? self.recordingResolution.height : self.recordingResolution.width
+                
+                self.compressedBuffer = CompressedFrameBuffer(
+                    capacity: bufferCapacity,
+                    delayFrameCount: delayFrames,
+                    width: bufferWidth,
+                    height: bufferHeight,
+                    fps: fps
+                )
+                self.cameraManager.compressedBuffer = self.compressedBuffer
+                self.delayReady = false
+            }
+
         // If already granted, start immediately
         if cameraManager.permissionGranted {
             cameraManager.startSession()
@@ -112,12 +142,17 @@ class CameraViewModel {
         let delayFrames = Int(settings.delaySeconds) * fps
         let bufferCapacity = Int(Double(delayFrames) * 1.1) + fps
 
-        // Use portrait dimensions (camera output rotated 90°)
+        // Use dimensions matching the tracked device orientation
+        let orientation = cameraManager.currentOrientation
+        let isLandscape = orientation == .landscapeLeft || orientation == .landscapeRight
+        let bufferWidth = isLandscape ? settings.resolution.width : settings.resolution.height
+        let bufferHeight = isLandscape ? settings.resolution.height : settings.resolution.width
+
         compressedBuffer = CompressedFrameBuffer(
             capacity: bufferCapacity,
             delayFrameCount: delayFrames,
-            width: settings.resolution.height,
-            height: settings.resolution.width,
+            width: bufferWidth,
+            height: bufferHeight,
             fps: fps
         )
         cameraManager.compressedBuffer = compressedBuffer
@@ -150,10 +185,15 @@ class CameraViewModel {
         // Start disk recorder
         let recorder = DiskRecorder()
         do {
-            // Use portrait dimensions (camera output is rotated 90°)
+            // Use dimensions matching the tracked device orientation
+            let orientation = cameraManager.currentOrientation
+            let isLandscape = orientation == .landscapeLeft || orientation == .landscapeRight
+            let recWidth = isLandscape ? recordingResolution.width : recordingResolution.height
+            let recHeight = isLandscape ? recordingResolution.height : recordingResolution.width
+            
             try recorder.startRecording(
-                width: recordingResolution.height,
-                height: recordingResolution.width,
+                width: recWidth,
+                height: recHeight,
                 fps: recordingFps
             )
             diskRecorder = recorder

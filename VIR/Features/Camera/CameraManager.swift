@@ -35,6 +35,9 @@ final class CameraManager: NSObject, ObservableObject, @unchecked Sendable {
     private let sessionQueue = DispatchQueue(label: "com.vir.camera.session")
     private let outputQueue = DispatchQueue(label: "com.vir.camera.output")
     private var frameCount = 0
+    private var orientationObserver: NSObjectProtocol?
+    @Published private(set) var currentOrientation: UIDeviceOrientation = .portrait
+    private var currentCameraPosition: CameraSelection = .rear
 
     // MARK: - Buffer & Recorder
 
@@ -170,15 +173,98 @@ final class CameraManager: NSObject, ObservableObject, @unchecked Sendable {
         }
         captureSession.addOutput(videoOutput)
 
-        // Fix video orientation
-        if let connection = videoOutput.connection(with: .video) {
-            if connection.isVideoRotationAngleSupported(90) {
-                connection.videoRotationAngle = 90
+        // Track camera position for mirroring logic
+        currentCameraPosition = cameraPosition
+
+        // Start observing orientation to dynamically apply rotation
+        startOrientationObserver()
+    }
+
+    // MARK: - Orientation Handling
+
+    /// Converts a device orientation to the corresponding video rotation angle.
+    private static func rotationAngle(for orientation: UIDeviceOrientation, isFront: Bool) -> CGFloat {
+        if isFront {
+            switch orientation {
+            case .portrait:           return 90  // Portrait is the same for front and back
+            case .landscapeLeft:      return 180 // Landscape is mirrored
+            case .landscapeRight:     return 0
+            case .portraitUpsideDown: return 270
+            default:                  return 90  // default to portrait
             }
-            if cameraPosition == .front && connection.isVideoMirroringSupported {
-                connection.isVideoMirrored = true
+        } else {
+            switch orientation {
+            case .portrait:           return 90
+            case .landscapeLeft:      return 0
+            case .landscapeRight:     return 180
+            case .portraitUpsideDown: return 270
+            default:                  return 90  // default to portrait
             }
         }
+    }
+
+    private func applyVideoRotation(for deviceOrientation: UIDeviceOrientation) {
+        let angle = Self.rotationAngle(for: deviceOrientation, isFront: currentCameraPosition == .front)
+        guard let connection = videoOutput.connection(with: .video) else { return }
+        if connection.isVideoRotationAngleSupported(angle) {
+            connection.videoRotationAngle = angle
+        }
+        if currentCameraPosition == .front && connection.isVideoMirroringSupported {
+            connection.isVideoMirrored = true
+        }
+    }
+
+    private func applyPreviewRotation(for deviceOrientation: UIDeviceOrientation) {
+        let angle = Self.rotationAngle(for: deviceOrientation, isFront: currentCameraPosition == .front)
+        // Preview layer connection is separate from the data output connection
+        if let previewConnection = captureSession.connections.first(where: { $0.videoPreviewLayer != nil }) {
+            if previewConnection.isVideoRotationAngleSupported(angle) {
+                previewConnection.videoRotationAngle = angle
+            }
+        }
+    }
+
+    private func startOrientationObserver() {
+        stopOrientationObserver()
+        DispatchQueue.main.async { [weak self] in
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+            // Set initial orientation on main thread, then apply
+            let orientation = UIDevice.current.orientation
+            let effective = orientation.isValidInterfaceOrientation ? orientation : .portrait
+            self?.sessionQueue.async {
+                self?.currentOrientation = effective
+                self?.applyVideoRotation(for: effective)
+                self?.applyPreviewRotation(for: effective)
+            }
+        }
+
+        orientationObserver = NotificationCenter.default.addObserver(
+            forName: UIDevice.orientationDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            let orientation = UIDevice.current.orientation
+            guard orientation.isValidInterfaceOrientation else { return }
+            self?.sessionQueue.async {
+                self?.currentOrientation = orientation
+                self?.applyVideoRotation(for: orientation)
+                self?.applyPreviewRotation(for: orientation)
+            }
+        }
+    }
+
+    private func stopOrientationObserver() {
+        if let observer = orientationObserver {
+            NotificationCenter.default.removeObserver(observer)
+            orientationObserver = nil
+        }
+        DispatchQueue.main.async {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
+    }
+
+    deinit {
+        stopOrientationObserver()
     }
 
     // MARK: - Start / Stop
