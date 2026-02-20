@@ -59,6 +59,14 @@ struct SessionDetailView: View {
                             Text("\(score)")
                                 .font(.title2).bold()
                         }
+                        if !session.arrowHits.isEmpty {
+                            HStack {
+                                Text("Average Score")
+                                Spacer()
+                                Text(String(format: "%.1f", Double(score) / Double(session.arrowHits.count)))
+                                    .font(.title2).bold()
+                            }
+                        }
                     }
                 } header: {
                     Text("Target")
@@ -70,14 +78,25 @@ struct SessionDetailView: View {
             NavigationLink(destination: ClipReplayView(clip: clip)) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Clip \(clip.durationText)")
+                        Text("Clip \(session.clips.firstIndex(where: { $0.id == clip.id }).map { $0 + 1 } ?? 0)")
                             .font(.headline)
-                        Text(clip.startTime.formatted())
+                        Text(clip.durationText)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
+                    if let hitId = clip.linkedArrowHitId,
+                       let hit = session.arrowHits.first(where: { $0.id == hitId }) {
+                        Text(hit.scoreDisplay)
+                            .font(.title2)
+                            .bold()
+                            .foregroundStyle(hit.ringScore >= 9 ? .yellow : hit.ringScore >= 7 ? .green : .primary)
+                    } else {
+                        Text("No score")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
+                }
                     .swipeActions {
                         Button {
                             exportClip(clip)
@@ -107,13 +126,47 @@ struct SessionDetailView: View {
 
     private func exportClip(_ clip: Clip) {
         guard let url = clip.fileURL else { return }
-        Task {
-            do {
-                try await ExportManager.saveVideoToPhotoLibrary(url: url)
-                exportStatus = "Saved to Photos!"
-            } catch {
-                exportStatus = "Export failed: \(error.localizedDescription)"
+        
+        // Build a descriptive filename with score
+        let clipIndex = session.clips.firstIndex(where: { $0.id == clip.id }).map { $0 + 1 } ?? 0
+        let sessionName = session.title.isEmpty
+            ? session.date.formatted(date: .abbreviated, time: .omitted).replacingOccurrences(of: " ", with: "")
+            : session.title.replacingOccurrences(of: " ", with: "_")
+        
+        var scorePart = ""
+        if let hitId = clip.linkedArrowHitId,
+           let hit = session.arrowHits.first(where: { $0.id == hitId }) {
+            scorePart = "_Score\(hit.scoreDisplay)"
+        }
+        
+        let ext = url.pathExtension
+        let exportName = "\(sessionName)_Clip\(clipIndex)\(scorePart).\(ext)"
+        
+        // Create a temporary copy with the descriptive filename
+        let tempDir = FileManager.default.temporaryDirectory
+        let tempURL = tempDir.appendingPathComponent(exportName)
+        try? FileManager.default.removeItem(at: tempURL)
+        
+        do {
+            try FileManager.default.copyItem(at: url, to: tempURL)
+        } catch {
+            exportStatus = "Export failed: \(error.localizedDescription)"
+            return
+        }
+        
+        // Present share sheet
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            var presenter = rootVC
+            while let presented = presenter.presentedViewController {
+                presenter = presented
             }
+            activityVC.completionWithItemsHandler = { _, _, _, _ in
+                try? FileManager.default.removeItem(at: tempURL)
+            }
+            presenter.present(activityVC, animated: true)
         }
     }
 }

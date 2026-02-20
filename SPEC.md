@@ -514,8 +514,8 @@ struct KeyPoint {
 - [x] Archery target scoring screen
 - [x] Clip-to-hit linking
 - [x] On-screen drawing overlay
-- [ ] in history detail view, show the scores of the clips
-- [ ] when export the clips, save the scores in the filename
+- [x] in history detail view, show the scores of the clips
+- [x] when export the clips, save the scores in the filename
 - [x] Angle measurement tool
 - [ ] Trim & export clips
 
