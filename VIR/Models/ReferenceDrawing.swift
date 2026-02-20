@@ -8,17 +8,15 @@ class ReferenceDrawing {
     var name: String
     var createdAt: Date
     var drawingData: Data // Serialized PKDrawing
+    var linesData: Data?  // Serialized [LineSegment]
+    var anglesData: Data? // Serialized [AngleMeasurement]
     
-    // Optional: Link to a specific clip if it's "the drawing for this clip"
-    // But for templates, we might not link to a specific clip.
-    // If we want to persist annotations separately from "templates", we could.
-    // user asked for "save the drawing ... then ... user can restore the drawing ... to compare"
-    // This implies saving templates.
-    
-    init(id: UUID = UUID(), name: String, createdAt: Date = Date(), drawingData: Data) {
+    init(id: UUID = UUID(), name: String, createdAt: Date = Date(), drawingData: Data, linesData: Data? = nil, anglesData: Data? = nil) {
         self.id = id
         self.name = name
         self.createdAt = createdAt
         self.drawingData = drawingData
+        self.linesData = linesData
+        self.anglesData = anglesData
     }
 }

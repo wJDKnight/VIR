@@ -457,7 +457,7 @@ struct KeyPoint {
 ## 10. Non-Functional Requirements
 
 ### 10.1 Supported Devices
-- **iPhone:** iPhone 12 and later (A14 Bionic+)
+- **iPhone:** iPhone 14 and later (A14 Bionic+)
 - **iPad:** iPad (9th gen) and later, iPad Air (4th gen)+, iPad Pro (M1+)
 - **Minimum RAM:** 4 GB (6 GB+ recommended for 1080p @ 60fps long buffers)
 
@@ -485,7 +485,7 @@ struct KeyPoint {
 | Unit Tests        | Buffer logic, scoring engine, clip splitting, data models               |
 | UI Tests          | Full user flow (setup → record → mark → stop → score → replay)          |
 | Performance Tests | Buffer write/read throughput, memory pressure handling                  |
-| Device Tests      | Physical device testing on iPhone 12, 14 Pro, 16 Pro Max; iPad Pro M2   |
+| Device Tests      | Physical device testing on iPhone  14 Pro                               |
 | Memory Tests      | Long-duration sessions (20 min) at all resolution/fps combos            |
 | Edge Cases        | App backgrounding mid-session, low memory warnings, camera interruption |
 
@@ -516,7 +516,7 @@ struct KeyPoint {
 - [x] On-screen drawing overlay
 - [ ] in history detail view, show the scores of the clips
 - [ ] when export the clips, save the scores in the filename
-- [ ] Angle measurement tool
+- [x] Angle measurement tool
 - [ ] Trim & export clips
 
 ### Phase 3 — Advanced Features
@@ -543,7 +543,7 @@ struct KeyPoint {
 | #   | Question                                           | Options                                            | Decision                                |
 | --- | -------------------------------------------------- | -------------------------------------------------- | --------------------------------------- |
 | 1   | Business model?                                    | Personal use only (no monetization needed)         | **Personal use**                        |
-| 2   | Volume button interception reliability on iOS 17+? | Test on physical devices; may need fallback        | Needs research                          |
+| 2   | Volume button interception reliability on iOS 26.0 | Test on physical devices; may need fallback        | Needs research                          |
 | 3   | Maximum practical buffer at 1080p/60fps?           | Depends on device RAM; need real-device benchmarks | Needs testing                           |
 | 4   | Support for external cameras (via USB-C)?          | Nice-to-have for tripod setups                     | Deferred to v2                          |
 | 5   | Apple Watch companion for remote marking?          | Could use WatchConnectivity for remote tap-to-mark | Deferred to v2                          |
