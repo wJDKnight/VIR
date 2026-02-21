@@ -29,6 +29,9 @@ struct ClipReplayView: View {
     // Optional: Auto-play on appear
     var autoPlay: Bool = true
     
+    // Controls Visibility
+    @State private var showControls: Bool = true
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             // MARK: - Video Player Area
@@ -132,7 +135,7 @@ struct ClipReplayView: View {
                 )
                 .transition(.move(edge: .bottom))
                 .padding()
-            } else {
+            } else if showControls {
                 VStack(spacing: 12) {
                     // Scrubber
                     VStack(spacing: 4) {
@@ -226,16 +229,29 @@ struct ClipReplayView: View {
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    withAnimation {
-                        isDrawing.toggle()
-                        if isDrawing {
-                             viewModel.pause()
+                HStack(spacing: 16) {
+                    if !isDrawing {
+                        Button {
+                            withAnimation {
+                                showControls.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showControls ? "eye" : "eye.slash")
+                                .foregroundStyle(.white)
                         }
                     }
-                } label: {
-                    Image(systemName: "pencil.tip.crop.circle")
-                        .foregroundStyle(isDrawing ? .orange : .white)
+                    
+                    Button {
+                        withAnimation {
+                            isDrawing.toggle()
+                            if isDrawing {
+                                 viewModel.pause()
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "pencil.tip.crop.circle")
+                            .foregroundStyle(isDrawing ? .orange : .white)
+                    }
                 }
             }
         }
