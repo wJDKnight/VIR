@@ -73,8 +73,8 @@ struct ClipReplayView: View {
                         if !straightLines.isEmpty || (isDrawing && drawingMode == .line) {
                             StraightLineOverlayView(
                                 lines: $straightLines,
-                                lineColor: overlayColor,
-                                lineWidth: overlayLineWidth,
+                                currentColor: overlayColor,
+                                currentLineWidth: overlayLineWidth,
                                 isInteractive: isDrawing && drawingMode == .line,
                                 isErasing: false
                             )
@@ -86,8 +86,8 @@ struct ClipReplayView: View {
                         if !angleMeasurements.isEmpty || (isDrawing && drawingMode == .angle) {
                             AngleMeasurementOverlayView(
                                 measurements: $angleMeasurements,
-                                lineColor: overlayColor,
-                                lineWidth: overlayLineWidth,
+                                currentColor: overlayColor,
+                                currentLineWidth: overlayLineWidth,
                                 isInteractive: isDrawing && drawingMode == .angle,
                                 isErasing: false
                             )

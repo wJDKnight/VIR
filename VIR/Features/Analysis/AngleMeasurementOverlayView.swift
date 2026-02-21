@@ -11,6 +11,13 @@ struct AngleMeasurement: Identifiable, Codable {
     var p3X: CGFloat
     var p3Y: CGFloat
     
+    // Stored color components so each angle remembers the color it was drawn with.
+    var colorR: Double
+    var colorG: Double
+    var colorB: Double
+    var colorA: Double
+    var lineWidth: CGFloat
+    
     var p1: CGPoint {
         get { CGPoint(x: p1X, y: p1Y) }
         set { p1X = newValue.x; p1Y = newValue.y }
@@ -24,11 +31,22 @@ struct AngleMeasurement: Identifiable, Codable {
         set { p3X = newValue.x; p3Y = newValue.y }
     }
     
-    init(p1: CGPoint, vertex: CGPoint, p3: CGPoint) {
+    var color: Color {
+        Color(red: colorR, green: colorG, blue: colorB, opacity: colorA)
+    }
+    
+    init(p1: CGPoint, vertex: CGPoint, p3: CGPoint, color: Color = .red, lineWidth: CGFloat = 5) {
         self.id = UUID()
         self.p1X = p1.x; self.p1Y = p1.y
         self.vertexX = vertex.x; self.vertexY = vertex.y
         self.p3X = p3.x; self.p3Y = p3.y
+        self.lineWidth = lineWidth
+        var r: CGFloat = 1, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1
+        UIColor(color).getRed(&r, green: &g, blue: &b, alpha: &a)
+        self.colorR = Double(r)
+        self.colorG = Double(g)
+        self.colorB = Double(b)
+        self.colorA = Double(a)
     }
     
     /// The measured angle in degrees at the vertex.
@@ -50,8 +68,9 @@ struct AngleMeasurement: Identifiable, Codable {
 /// In eraser mode, tapping near any point of a measurement removes it.
 struct AngleMeasurementOverlayView: View {
     @Binding var measurements: [AngleMeasurement]
-    var lineColor: Color
-    var lineWidth: CGFloat
+    // currentColor/currentLineWidth are used only for the in-progress pending points preview.
+    var currentColor: Color
+    var currentLineWidth: CGFloat
     var isInteractive: Bool
     var isErasing: Bool
     
@@ -60,7 +79,7 @@ struct AngleMeasurementOverlayView: View {
     
     var body: some View {
         ZStack {
-            // Render completed measurements
+            // Render completed measurements using each measurement's own stored color/width
             Canvas { context, _ in
                 for m in measurements {
                     drawMeasurement(m, in: &context)
@@ -75,7 +94,7 @@ struct AngleMeasurementOverlayView: View {
                     // Dot
                     context.fill(
                         Path(ellipseIn: CGRect(x: pt.x - dotRadius, y: pt.y - dotRadius, width: dotRadius * 2, height: dotRadius * 2)),
-                        with: .color(lineColor)
+                        with: .color(currentColor)
                     )
                     
                     // Label
@@ -86,7 +105,7 @@ struct AngleMeasurementOverlayView: View {
                     default: label = "P3"
                     }
                     context.draw(
-                        Text(label).font(.caption.bold()).foregroundColor(lineColor),
+                        Text(label).font(.caption.bold()).foregroundColor(currentColor),
                         at: CGPoint(x: pt.x + 12, y: pt.y - 12)
                     )
                     
@@ -95,7 +114,7 @@ struct AngleMeasurementOverlayView: View {
                         var path = Path()
                         path.move(to: pendingPoints[0])
                         path.addLine(to: pt)
-                        context.stroke(path, with: .color(lineColor.opacity(0.5)), style: StrokeStyle(lineWidth: lineWidth, dash: [6, 4]))
+                        context.stroke(path, with: .color(currentColor.opacity(0.5)), style: StrokeStyle(lineWidth: currentLineWidth, dash: [6, 4]))
                     }
                 }
             }
@@ -121,7 +140,9 @@ struct AngleMeasurementOverlayView: View {
                             let m = AngleMeasurement(
                                 p1: pendingPoints[0],
                                 vertex: pendingPoints[1],
-                                p3: pendingPoints[2]
+                                p3: pendingPoints[2],
+                                color: currentColor,
+                                lineWidth: currentLineWidth
                             )
                             measurements.append(m)
                             pendingPoints.removeAll()
@@ -171,22 +192,22 @@ struct AngleMeasurementOverlayView: View {
     private func drawMeasurement(_ m: AngleMeasurement, in context: inout GraphicsContext) {
         let dotRadius: CGFloat = 5
         
-        // Draw the two rays from vertex
+        // Draw the two rays from vertex using the measurement's own stored color/width
         var ray1 = Path()
         ray1.move(to: m.vertex)
         ray1.addLine(to: m.p1)
-        context.stroke(ray1, with: .color(lineColor), lineWidth: lineWidth)
+        context.stroke(ray1, with: .color(m.color), lineWidth: m.lineWidth)
         
         var ray2 = Path()
         ray2.move(to: m.vertex)
         ray2.addLine(to: m.p3)
-        context.stroke(ray2, with: .color(lineColor), lineWidth: lineWidth)
+        context.stroke(ray2, with: .color(m.color), lineWidth: m.lineWidth)
         
         // Draw dots at all three points
         for pt in [m.p1, m.vertex, m.p3] {
             context.fill(
                 Path(ellipseIn: CGRect(x: pt.x - dotRadius, y: pt.y - dotRadius, width: dotRadius * 2, height: dotRadius * 2)),
-                with: .color(lineColor)
+                with: .color(m.color)
             )
         }
         
@@ -209,7 +230,7 @@ struct AngleMeasurementOverlayView: View {
             endAngle: Angle(radians: Double(endAngle)),
             clockwise: clockwise
         )
-        context.stroke(arcPath, with: .color(lineColor), lineWidth: lineWidth * 0.7)
+        context.stroke(arcPath, with: .color(m.color), lineWidth: m.lineWidth * 0.7)
         
         // Draw angle label
         let midAngle = startAngle + (clockwise ? -1 : 1) * abs(sweep) / 2
@@ -222,7 +243,7 @@ struct AngleMeasurementOverlayView: View {
         context.draw(
             Text(angleText)
                 .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundColor(lineColor),
+                .foregroundColor(m.color),
             at: labelPoint
         )
     }
