@@ -194,13 +194,15 @@ struct TargetScoringView: View {
             linkedClipId: currentClip?.id
         )
         
-        arrowHits.append(newHit)
-        totalScore += score.score
-        
-        currentArrowIndex += 1
-        
-        // Reset cursor to center for next arrow
-        currentArrowLocation = CGPoint(x: 0.5, y: 0.5)
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+            arrowHits.append(newHit)
+            totalScore += score.score
+            
+            currentArrowIndex += 1
+            
+            // Reset cursor to center for next arrow
+            currentArrowLocation = CGPoint(x: 0.5, y: 0.5)
+        }
         
         if currentArrowIndex >= recordedClips.count {
             // Auto complete or wait for user to hit Done?

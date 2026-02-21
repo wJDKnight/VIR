@@ -259,6 +259,8 @@ struct MainCameraScreen: View {
                 .padding(.bottom, 20)
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isRecording)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.delayReady)
         .onTapGesture(count: 3) {
             withAnimation { showDebug.toggle() }
         }

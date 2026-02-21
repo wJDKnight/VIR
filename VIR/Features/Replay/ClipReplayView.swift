@@ -133,7 +133,7 @@ struct ClipReplayView: View {
                         }
                     }
                 )
-                .transition(.move(edge: .bottom))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
                 .padding()
             } else if showControls {
                 VStack(spacing: 12) {
@@ -272,7 +272,7 @@ struct ClipReplayView: View {
                 }
                 .padding()
                 .background(.ultraThinMaterial)
-                .transition(.move(edge: .bottom))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -290,7 +290,7 @@ struct ClipReplayView: View {
                 HStack(spacing: 16) {
                     if !isDrawing {
                         Button {
-                            withAnimation {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                                 showControls.toggle()
                             }
                         } label: {
@@ -300,7 +300,7 @@ struct ClipReplayView: View {
                     }
                     
                     Button {
-                        withAnimation {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                             isDrawing.toggle()
                             if isDrawing {
                                  viewModel.pause()

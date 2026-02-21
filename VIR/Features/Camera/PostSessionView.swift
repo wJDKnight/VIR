@@ -53,10 +53,14 @@ struct PostSessionView: View {
                             }
                         }
                         
-                        isScoring = false
+                        withAnimation(.easeInOut) {
+                            isScoring = false
+                        }
                     },
                     onSkip: {
-                        isScoring = false
+                        withAnimation(.easeInOut) {
+                            isScoring = false
+                        }
                     }
                 )
             } else {

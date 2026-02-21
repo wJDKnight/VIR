@@ -520,9 +520,7 @@ struct KeyPoint {
 - [x] Trim & export clips
 
 ### Phase 3 — Advanced Features
-- [ ] Split screen / versus mode, pick two clips to compare
-- [ ] Stopwatch overlay
-- [ ] Motion detection grid
+
 - [x] Horizontal flip and rotation
 - [x] Session history with SwiftData persistence
 - [x] Annotation saving
@@ -536,6 +534,10 @@ struct KeyPoint {
 - [ ] TestFlight beta
 - [ ] App Store submission
 
+### future
+- [ ] Split screen / versus mode, pick two clips to compare
+- [ ] Stopwatch overlay
+- [ ] AI Motion detection grid
 ---
 
 ## 13. Open Questions & Decisions
