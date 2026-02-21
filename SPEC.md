@@ -517,15 +517,15 @@ struct KeyPoint {
 - [x] in history detail view, show the scores of the clips
 - [x] when export the clips, save the scores in the filename
 - [x] Angle measurement tool
-- [ ] Trim & export clips
+- [x] Trim & export clips
 
 ### Phase 3 — Advanced Features
 - [ ] Split screen / versus mode, pick two clips to compare
 - [ ] Stopwatch overlay
 - [ ] Motion detection grid
-- [ ] Horizontal flip and rotation
+- [x] Horizontal flip and rotation
 - [x] Session history with SwiftData persistence
-- [ ] Annotation saving
+- [x] Annotation saving
 
 ### Phase 4 — Polish & Launch
 - [ ] UI/UX refinement and animations

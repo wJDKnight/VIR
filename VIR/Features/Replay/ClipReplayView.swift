@@ -208,9 +208,67 @@ struct ClipReplayView: View {
                                     )
                                     .clipShape(Capsule())
                             }
-                            .buttonStyle(.plain)
                         }
                     }
+                    
+                    Divider()
+                        .background(.gray.opacity(0.5))
+                    
+                    // Trim Controls
+                    HStack(spacing: 16) {
+                        Text("Trim:")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            // Ensure start < end if end is set
+                            if let end = viewModel.trimEnd, viewModel.currentTime >= end {
+                                return
+                            }
+                            clip.trimStart = viewModel.currentTime
+                            viewModel.setTrim(start: clip.trimStart, end: viewModel.trimEnd)
+                        } label: {
+                            Text("Set Start")
+                                .font(.caption2.bold())
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(clip.trimStart != nil ? Color.green : Color.gray.opacity(0.3))
+                                .clipShape(Capsule())
+                        }
+                        
+                        Button {
+                            // Ensure end > start if start is set
+                            if let start = viewModel.trimStart, viewModel.currentTime <= start {
+                                return
+                            }
+                            clip.trimEnd = viewModel.currentTime
+                            viewModel.setTrim(start: viewModel.trimStart, end: clip.trimEnd)
+                        } label: {
+                            Text("Set End")
+                                .font(.caption2.bold())
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(clip.trimEnd != nil ? Color.green : Color.gray.opacity(0.3))
+                                .clipShape(Capsule())
+                        }
+                        
+                        if clip.trimStart != nil || clip.trimEnd != nil {
+                            Button {
+                                clip.trimStart = nil
+                                clip.trimEnd = nil
+                                viewModel.setTrim(start: nil, end: nil)
+                            } label: {
+                                Text("Clear")
+                                    .font(.caption2.bold())
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(Color.red.opacity(0.8))
+                                    .clipShape(Capsule())
+                            }
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.white)
                 }
                 .padding()
                 .background(.ultraThinMaterial)

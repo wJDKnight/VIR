@@ -15,6 +15,10 @@ class ReplayViewModel {
 
     private(set) var player: AVPlayer?
     private var timeObserver: Any?
+    
+    // Active Trim Boundaries
+    var trimStart: TimeInterval?
+    var trimEnd: TimeInterval?
 
     // MARK: - Load
 
@@ -31,6 +35,10 @@ class ReplayViewModel {
 
         // Observe time
         setupTimeObserver()
+
+        // Load trim boundaries
+        self.trimStart = clip.trimStart
+        self.trimEnd = clip.trimEnd
 
         // Get duration
         Task { @MainActor in
@@ -55,11 +63,18 @@ class ReplayViewModel {
                 guard let self = self else { return }
                 self.currentTime = time.seconds
                 
-                // Check for end of playback
-                if let item = self.player?.currentItem,
-                   abs(time.seconds - item.duration.seconds) < 0.1,
-                   self.isPlaying {
-                    self.isPlaying = false
+                // Check for end of playback (or end of trim window)
+                if self.isPlaying {
+                    if let end = self.trimEnd {
+                        if time.seconds >= end - 0.05 { // Tiny threshold to ensure it doesn't overshoot
+                            self.seek(to: end)
+                            self.pause()
+                        }
+                    } else if let item = self.player?.currentItem {
+                        if abs(time.seconds - item.duration.seconds) < 0.1 {
+                            self.isPlaying = false
+                        }
+                    }
                 }
             }
         }
@@ -68,9 +83,14 @@ class ReplayViewModel {
     // MARK: - Controls
 
     func play() {
-        // If at end, restart
-        if abs(currentTime - duration) < 0.1 && duration > 0 {
-            seek(to: 0)
+        // If at end or past trimEnd, restart at trimStart or 0
+        let currentBoundaryEnd = trimEnd ?? duration
+        let currentBoundaryStart = trimStart ?? 0.0
+        
+        if currentTime >= currentBoundaryEnd - 0.1 && currentBoundaryEnd > 0 {
+            seek(to: currentBoundaryStart)
+        } else if currentTime < currentBoundaryStart {
+            seek(to: currentBoundaryStart)
         }
         
         player?.rate = playbackRate
@@ -103,14 +123,31 @@ class ReplayViewModel {
     func stepForward(fps: Int = 30) {
         pause()
         let frameTime = 1.0 / Double(fps)
-        seek(to: min(currentTime + frameTime, duration))
+        let upperLimit = trimEnd ?? duration
+        seek(to: min(currentTime + frameTime, upperLimit))
     }
 
     /// Step backward one frame
     func stepBackward(fps: Int = 30) {
         pause()
         let frameTime = 1.0 / Double(fps)
-        seek(to: max(currentTime - frameTime, 0))
+        let lowerLimit = trimStart ?? 0.0
+        seek(to: max(currentTime - frameTime, lowerLimit))
+    }
+    
+    // MARK: - Trim API
+    
+    func setTrim(start: TimeInterval?, end: TimeInterval?) {
+        self.trimStart = start
+        self.trimEnd = end
+        
+        // Adjust current playback head if it's now out of bounds
+        if let s = start, currentTime < s {
+            seek(to: s)
+        }
+        if let e = end, currentTime > e {
+            seek(to: e)
+        }
     }
 
     // MARK: - Cleanup

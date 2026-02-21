@@ -11,6 +11,10 @@ class Clip: Identifiable {
     var fileSize: Int64         // Size in bytes
     var linkedArrowHitId: UUID?
     
+    // Trim User Settings
+    var trimStart: TimeInterval?
+    var trimEnd: TimeInterval?
+    
     // Inverse relationship (unwrapped optional to allow temporary detachment)
     var session: Session?
     
@@ -21,7 +25,9 @@ class Clip: Identifiable {
         endTime: TimeInterval,
         fileName: String? = nil,
         fileSize: Int64 = 0,
-        linkedArrowHitId: UUID? = nil
+        linkedArrowHitId: UUID? = nil,
+        trimStart: TimeInterval? = nil,
+        trimEnd: TimeInterval? = nil
     ) {
         self.id = id
         self.sessionId = sessionId
@@ -30,6 +36,8 @@ class Clip: Identifiable {
         self.fileName = fileName
         self.fileSize = fileSize
         self.linkedArrowHitId = linkedArrowHitId
+        self.trimStart = trimStart
+        self.trimEnd = trimEnd
     }
 
     /// Reconstructs the full file URL from the stored filename
