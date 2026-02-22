@@ -257,53 +257,54 @@ VIR/
 ├── Features/
 │   ├── Camera/
 │   │   ├── CameraManager.swift           # AVCaptureSession setup & control
-│   │   ├── CircularFrameBuffer.swift      # RAM ring buffer for delayed playback
-│   │   ├── DelayedPlaybackView.swift      # SwiftUI view rendering delayed feed
+│   │   ├── CircularFrameBuffer.swift     # RAM ring buffer for delayed playback
+│   │   ├── CompressedFrameBuffer.swift   # Compressed buffer
+│   │   ├── DiskRecorder.swift            # Save buffer to disk
+│   │   ├── MainCameraScreen.swift        # Main delayed feed screen
+│   │   ├── CameraPreviewView.swift       # Camera preview
 │   │   ├── CameraViewModel.swift
-│   │   └── CameraSettingsView.swift
+│   │   ├── CameraSettingsView.swift
+│   │   ├── DelayedPlaybackView.swift
+│   │   ├── PostSessionView.swift
+│   │   ├── SessionReviewView.swift
+│   │   └── DebugOverlay.swift
 │   ├── Marking/
 │   │   ├── KeyPointMarker.swift           # Timestamp marking logic
 │   │   ├── VolumeButtonHandler.swift      # Hardware volume button listener
 │   │   └── MarkingFeedbackView.swift      # Visual + haptic feedback
 │   ├── Replay/
-│   │   ├── ReplayPlayerView.swift
-│   │   ├── ReplayViewModel.swift
-│   │   ├── PlaybackSpeedControl.swift
-│   │   └── FrameStepperView.swift
+│   │   ├── ClipReplayView.swift           # Main replay interface
+│   │   └── ReplayViewModel.swift          # Replay view logic
 │   ├── Analysis/
-│   │   ├── DrawingOverlayView.swift
-│   │   ├── AngleMeasurementTool.swift
-│   │   ├── StopwatchOverlay.swift
-│   │   ├── MotionDetectionGrid.swift
-│   │   └── VideoTransformTools.swift      # Flip, rotate
+│   │   ├── DrawingCanvasView.swift        # Canvas for drawings and annotations
+│   │   ├── DrawingMode.swift              # Modes (pen, eraser, etc.)
+│   │   ├── DrawingToolBar.swift           # Tool selection overlay
+│   │   ├── StraightLineOverlayView.swift  # Straight line rendering
+│   │   └── AngleMeasurementOverlayView.swift # Angle measurement tool
 │   ├── Scoring/
 │   │   ├── TargetFaceView.swift           # Archery target rendering
-│   │   ├── ArrowPlacementView.swift
-│   │   ├── ScoringEngine.swift
-│   │   ├── ClipToHitLinker.swift
-│   │   └── ScoreboardView.swift
+│   │   ├── TargetScoringView.swift        # Interactive scoring interface
+│   │   └── ScoringEngine.swift            # Calculate scores based on positions
 │   ├── ClipManagement/
 │   │   ├── AutoClipper.swift              # Splits buffer at key point markers
-│   │   ├── ClipListView.swift
-│   │   ├── TrimView.swift
-│   │   └── ExportManager.swift
+│   │   ├── ClipListView.swift             # Manage and review list of clips
+│   │   └── ExportManager.swift            # Export clips to photos
 │   └── SessionHistory/
-│       ├── SessionListView.swift
-│       ├── SessionDetailView.swift
-│       └── SessionStore.swift             # SwiftData persistence
+│       ├── SessionListView.swift          # List of past sessions
+│       ├── SessionDetailView.swift        # Session detail and targets
+│       └── SessionManager.swift           # SwiftData and file management
 ├── Models/
-│   ├── Session.swift
-│   ├── Clip.swift
-│   ├── KeyPoint.swift
-│   ├── ArrowHit.swift
-│   └── AppSettings.swift
+│   ├── Session.swift                      # Session metadata
+│   ├── Clip.swift                         # Clip metadata and bounds
+│   ├── KeyPoint.swift                     # Timestamp markers
+│   ├── ArrowHit.swift                     # Arrow scoring and positions
+│   ├── AppSettings.swift                  # App global settings
+│   ├── VideoEnums.swift                   # Video settings enums
+│   └── ReferenceDrawing.swift             # Persisted drawings
 ├── Shared/
-│   ├── Extensions/
-│   ├── Components/                        # Reusable UI components
-│   └── Constants.swift
-└── Resources/
-    ├── Assets.xcassets
-    └── TargetFaces/                       # Target face images
+│   ├── Extensions/                        # Swift extensions
+│   └── Constants.swift                    # Global constants
+└── Assets.xcassets
 ```
 
 ### 5.3 Circular Frame Buffer Design
@@ -409,10 +410,12 @@ class Session {
     var resolution: VideoResolution
     var fps: Int
     var delaySeconds: Double
-    var clips: [Clip]
-    var arrowHits: [ArrowHit]
+    @Relationship(deleteRule: .cascade, inverse: \Clip.session) var clips: [Clip]
+    @Relationship(deleteRule: .cascade, inverse: \ArrowHit.session) var arrowHits: [ArrowHit]
     var totalScore: Int?
     var targetFaceType: TargetFaceType
+    var title: String = ""
+    var note: String = ""
 }
 ```
 
@@ -424,9 +427,12 @@ class Clip {
     var sessionId: UUID
     var startTime: TimeInterval
     var endTime: TimeInterval
-    var fileURL: URL?           // nil until exported
-    var linkedArrowHit: ArrowHit?
-    var annotations: [Annotation]?
+    var fileName: String?       // Store filename relative to VIRConstants.clipsDirectory
+    var fileSize: Int64         // Size in bytes
+    var linkedArrowHitId: UUID?
+    var trimStart: TimeInterval?
+    var trimEnd: TimeInterval?
+    var session: Session?       // Inverse relationship
 }
 ```
 
@@ -436,19 +442,37 @@ class Clip {
 class ArrowHit {
     var id: UUID
     var sessionId: UUID
-    var position: CGPoint       // normalized (0...1) on target face
-    var ringScore: Int          // 0 (miss) to 10, or 11 for X
-    var arrowIndex: Int         // order within the round
+    var arrowIndex: Int         // 1-based index (Arrow 1, Arrow 2...)
+    var x: Double               // Normalized position on target face (0,0 is top-left)
+    var y: Double
+    var ringScore: Int          // 0 (M), 1..10
+    var isX: Bool               // Inner 10
     var linkedClipId: UUID?
+    var session: Session?       // Inverse relationship
 }
 ```
 
 ### 9.4 KeyPoint
 ```swift
-struct KeyPoint {
-    var timestamp: TimeInterval  // position in buffer timeline
-    var frameIndex: Int
-    var source: MarkSource       // .doubleTap | .volumeButton | .onScreenButton
+struct KeyPoint: Identifiable {
+    let id = UUID()
+    let timestamp: TimeInterval  // position in buffer timeline
+    let frameIndex: Int
+    let source: MarkSource       // .doubleTap | .volumeButton | .onScreenButton
+    let createdAt: Date = Date()
+}
+```
+
+### 9.5 ReferenceDrawing
+```swift
+@Model
+class ReferenceDrawing {
+    var id: UUID
+    var name: String
+    var createdAt: Date
+    var drawingData: Data // Serialized PKDrawing
+    var linesData: Data?  // Serialized [LineSegment]
+    var anglesData: Data? // Serialized [AngleMeasurement]
 }
 ```
 
@@ -524,20 +548,21 @@ struct KeyPoint {
 - [x] Horizontal flip and rotation
 - [x] Session history with SwiftData persistence
 - [x] Annotation saving
+- [x] UI/UX refinement and animations
 
-### Phase 4 — Polish & Launch
-- [ ] UI/UX refinement and animations
+### future functions
+- [ ] Apple watch companion
+- [ ] Split screen / versus mode, pick two clips to compare
+- [ ] Stopwatch overlay
+- [ ] AI Motion detection grid
+
+### future  Launch
 - [ ] Accessibility audit
 - [ ] Performance optimization
 - [ ] App Store assets (screenshots, description, preview video)
 - [ ] Privacy policy
 - [ ] TestFlight beta
 - [ ] App Store submission
-
-### future
-- [ ] Split screen / versus mode, pick two clips to compare
-- [ ] Stopwatch overlay
-- [ ] AI Motion detection grid
 ---
 
 ## 13. Open Questions & Decisions
